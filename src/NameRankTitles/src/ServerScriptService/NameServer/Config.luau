@@ -57,6 +57,6 @@ Config.divisions = {
 	}
 }
 
-Config.VERSION = "1.1.0"
+Config.VERSION = "1.1.1"
 
 return Config

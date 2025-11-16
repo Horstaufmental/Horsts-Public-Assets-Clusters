@@ -201,7 +201,7 @@ local function onCharacterAdded(character)
 	user.TextColor3 = team.TeamColor.Color
 	rankClone.TextColor3 = Color3.fromRGB(255, 255, 255)
 
-	local highest_division = {}
+	local highest_division = nil
 
 	for k,v in pairs(divisions) do -- 1st level, factions
 		if team.Name ~= k then
