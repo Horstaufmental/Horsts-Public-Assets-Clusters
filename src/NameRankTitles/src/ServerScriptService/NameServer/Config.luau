@@ -26,15 +26,37 @@ Config.listName = "Titles"
 
 --[[
 ["Team Name"] = {
-	["Division Name"] = {groupID, divisionIcon, RGB},
+	["Division Name"] = {groupID, divisionIcon, RGB, minRank, maxRank},
 }
 ]]--
 Config.divisions = {
-	["Misty Lake Fairy Order"] = {
-		["21st Armored Grenadier"] = {0, "rbxassetid://14842204514", nil},
-		["7th Littoral Marine Regiment"] = {0, "rbxassetid://14842204514", Color3.fromRGB(200, 0, 0)},
-		["The Knightly Order"] = {0, "rbxassetid://14842204514", Color3.fromRGB(0,0,0)}
+	["Misty Lake Fairy Order"] = { -- Team Name
+		["21st Armored Grenadier"] = { -- Division Name
+			0, -- groupID
+			"rbxassetid://14842204514", -- divisionIcon
+			nil, -- RGB
+			1, -- minRank
+			255 -- maxRank
+		},
+
+		["7th Littoral Marine Regiment"] = { -- Division Name
+			0, -- groupID
+			"rbxassetid://14842204514", -- divisionIcon
+			Color3.fromRGB(200, 0, 0), -- RGB
+			1, -- minRank
+			255 -- maxRank
+		},
+		
+		["The Knightly Order"] = { -- Division Name
+			0, -- groupID
+			"rbxassetid://14842204514", -- divisionIcon
+			Color3.fromRGB(0, 0, 0), -- RGB
+			10, -- minRank
+			250 -- maxRank
+		},
 	}
 }
+
+Config.VERSION = "1.1.0"
 
 return Config

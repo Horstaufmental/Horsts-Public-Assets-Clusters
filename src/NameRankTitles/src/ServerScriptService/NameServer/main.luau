@@ -187,8 +187,10 @@ local function onCharacterAdded(character)
 	local user = tag.Container:WaitForChild('Primary')
 	local rankClone = tag.Container:WaitForChild('Secondary')
 	local bar = tag.Container:WaitForChild('Bar')
+	
+	local barrank_value
 	if not player:FindFirstChild("ranktag_barrank") then
-		local barrank_value = Instance.new("StringValue")
+		barrank_value = Instance.new("StringValue")
 		barrank_value.Name = "barrank_value"
 		barrank_value.Parent = player
 	end
@@ -199,27 +201,48 @@ local function onCharacterAdded(character)
 	user.TextColor3 = team.TeamColor.Color
 	rankClone.TextColor3 = Color3.fromRGB(255, 255, 255)
 
+	local highest_division = {}
+
 	for k,v in pairs(divisions) do -- 1st level, factions
 		if team.Name ~= k then
 			continue
 		end
 
 		for ke,va in pairs(v) do -- 2nd level, divisions
-			if player:IsInGroup(va[1]) then
-				bar.Visible = true
-				user.Position = UDim2.new(0.5, 0, -0.05, 0)
-				rankClone.Position = UDim2.new(0.5, 0, 0.26, 0)
+			-- backward compatibility
+			local minRank = va[4] or 1
+			local maxRank = va[5] or 255
+			local curRank = player:GetRankInGroup(va[1])
+			
+			if player:IsInGroup(va[1]) and (minRank <= curRank and curRank <= maxRank) then
+				-- sort by highest ranking
+				if highest_division[1] == nil or player:GetRankInGroup(va[1]) > player:GetRankInGroup(highest_division[1]) then
+					local bgclr
+					if va[3] ~= nil then bgclr = va[3] else bgclr = team.TeamColor.Color end
 
-				bar.BarEntry.Text = ke
-				bar.DivisionIcon.Image = va[2]
-
-				if va[3] == nil then
-					bar.BackgroundColor3 = team.TeamColor.Color
-				else
-					bar.BackgroundColor3 = va[3]
+					-- {rankId, BarText, BarRank, DivIcon, BackgroundColor}
+					highest_division = {
+						player:GetRankInGroup(va[1]),
+						ke,
+						player:GetRoleInGroup(va[1]),
+						va[2],
+						bgclr
+					}
 				end
 			end
 		end
+	end
+
+	if highest_division ~= nil then
+		bar.Visible = true
+		user.Position = UDim2.new(0.5, 0, -0.05, 0)
+		rankClone.Position = UDim2.new(0.5, 0, 0.26, 0)
+
+		bar.BarEntry.Text = highest_division[2]
+		barrank_value.Value = highest_division[3]
+		bar.DivisionIcon.Image = highest_division[4]
+
+		bar.BackgroundColor3 = highest_division[5]
 	end
 
 	-- Custom Titles from Trello
@@ -241,7 +264,7 @@ local function onCharacterAdded(character)
 			bar.Visible = true
 			user.Position = UDim2.new(0.5, 0, -0.05, 0)
 			rankClone.Position = UDim2.new(0.5, 0, 0.26, 0)
-			
+
 			bar.BarEntry.Text = Bar
 		end
 
