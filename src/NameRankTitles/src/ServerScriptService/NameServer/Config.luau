@@ -26,7 +26,7 @@ Config.listName = "Titles"
 
 --[[
 ["Team Name"] = {
-	["Division Name"] = {groupID, divisionIcon, RGB, minRank, maxRank},
+	["Division Name"] = {groupID, divisionIcon, RGB, minRank, maxRank, priority},
 }
 ]]--
 Config.divisions = {
@@ -36,7 +36,8 @@ Config.divisions = {
 			"rbxassetid://14842204514", -- divisionIcon
 			nil, -- RGB
 			1, -- minRank
-			255 -- maxRank
+			255, -- maxRank
+			0, -- priority, higher number = higher priority
 		},
 
 		["7th Littoral Marine Regiment"] = { -- Division Name
@@ -44,7 +45,8 @@ Config.divisions = {
 			"rbxassetid://14842204514", -- divisionIcon
 			Color3.fromRGB(200, 0, 0), -- RGB
 			1, -- minRank
-			255 -- maxRank
+			255, -- maxRank
+			2, -- priority
 		},
 		
 		["The Knightly Order"] = { -- Division Name
@@ -52,11 +54,12 @@ Config.divisions = {
 			"rbxassetid://14842204514", -- divisionIcon
 			Color3.fromRGB(0, 0, 0), -- RGB
 			10, -- minRank
-			250 -- maxRank
+			250, -- maxRank
+			10, -- priority
 		},
 	}
 }
 
-Config.VERSION = "1.1.1"
+Config.VERSION = "1.2.0-alpha"
 
 return Config

@@ -187,7 +187,7 @@ local function onCharacterAdded(character)
 	local user = tag.Container:WaitForChild('Primary')
 	local rankClone = tag.Container:WaitForChild('Secondary')
 	local bar = tag.Container:WaitForChild('Bar')
-	
+
 	local barrank_value
 	if not player:FindFirstChild("ranktag_barrank") then
 		barrank_value = Instance.new("StringValue")
@@ -208,17 +208,24 @@ local function onCharacterAdded(character)
 			continue
 		end
 
+		local oldPriority = 0
 		for ke,va in pairs(v) do -- 2nd level, divisions
 			-- backward compatibility
 			local minRank = va[4] or 1
 			local maxRank = va[5] or 255
+			local curPriority = va[6] or 0
 			local curRank = player:GetRankInGroup(va[1])
-			
-			if player:IsInGroup(va[1]) and (minRank <= curRank and curRank <= maxRank) then
+
+			if player:IsInGroup(va[1]) and ((minRank <= curRank and curRank <= maxRank)) then
 				-- sort by highest ranking
-				if highest_division[1] == nil or player:GetRankInGroup(va[1]) > player:GetRankInGroup(highest_division[1]) then
+				-- keep breaking differently in every sessions i tested
+				if highest_division == nil or curPriority >= oldPriority then
+					if curPriority == oldPriority and curRank < highest_division[1] then
+						continue
+					end
 					local bgclr
 					if va[3] ~= nil then bgclr = va[3] else bgclr = team.TeamColor.Color end
+					oldPriority = curPriority
 
 					-- {rankId, BarText, BarRank, DivIcon, BackgroundColor}
 					highest_division = {
@@ -329,7 +336,9 @@ game.ReplicatedStorage.UpdateTag.OnServerEvent:Connect(function(player)
 end)
 ]]--
 
-while (true) do
-	wait(30);
-	updateTrelloCache();
-end
+task.spawn(function()
+	while true do
+		task.wait(30)
+		updateTrelloCache()
+	end
+end)
