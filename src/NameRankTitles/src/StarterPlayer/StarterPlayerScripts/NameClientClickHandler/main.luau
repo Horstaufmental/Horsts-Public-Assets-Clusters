@@ -52,7 +52,7 @@ local function InitHighlight(local_player: Player, target: Player, max_dist: num
 		if dist > max_dist then
 			print(script.Name .. ": max > max_dist, exiting")
 			toggle = false
-			toggleEvent:Fire()
+			toggleEvent:Fire() -- for some motherfucking reason the :GetPropertyChangedSignal() or :Changed() wouldnt fire so this is my best workaround
 		elseif t <= 0.5 then
 			--print("green to yellow: dist: ".. dist .. " | t: " .. t / 0.5)
 			highlight.FillColor = Color3.new(0, 1, 0):Lerp(Color3.new(1, 1, 0), t / 0.5)
@@ -111,7 +111,7 @@ Mouse.Button1Down:Connect(function()
 		if previousPlayer == "" then
 			previousPlayer = PlayerTargeted.Name
 		elseif previousPlayer ~= "" and previousPlayer ~= PlayerTargeted.Name then
-			typewrite(Character.Head:FindFirstChild("Tag").Container.Bar.BarEntry, cache[previousPlayer], 0.15)
+			task.spawn(typewrite, Character.Head:FindFirstChild("Tag").Container.Bar.BarEntry, cache[previousPlayer], 0.15)
 			previousPlayer = PlayerTargeted.Name
 		end
 
@@ -132,7 +132,7 @@ Mouse.Button1Down:Connect(function()
 				end
 				tween_select:Play()
 				task.spawn(InitHighlight, Player, PlayerTargeted, max_dist)
-				typewrite(bar.BarEntry, PlayerTargeted.barrank_value.Value, 0.25)
+				task.spawn(typewrite, bar.BarEntry, PlayerTargeted.barrank_value.Value, 0.25)
 			else
 				for _, v in pairs(Character:GetChildren()) do
 					if v:IsA("Highlight") then
@@ -140,7 +140,7 @@ Mouse.Button1Down:Connect(function()
 					end
 				end
 				tween_unselect:Play()
-				typewrite(bar.BarEntry, cache[PlayerTargeted.Name], 0.25)
+				task.spawn(typewrite, bar.BarEntry, cache[PlayerTargeted.Name], 0.25)
 			end
 		end
 
@@ -162,6 +162,6 @@ toggleEvent.Event:Connect(function()
 			end
 		end
 		tween_unselect:Play()
-		typewrite(bar.BarEntry, cache[PlayerTargeted.Name], 0.25)
+		task.spawn(typewrite, bar.BarEntry, cache[PlayerTargeted.Name], 0.25)
 	end
 end)
