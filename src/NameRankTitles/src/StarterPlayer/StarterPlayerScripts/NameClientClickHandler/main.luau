@@ -1,7 +1,8 @@
 --[[
     Copyright (c) 2025 Horstaufmental
     SPDX-License-Identifier: MPL-2.0
-]]--
+]]
+--
 local Player = game.Players.LocalPlayer
 local Mouse = Player:GetMouse()
 
@@ -35,7 +36,7 @@ local Character
 local tween_select
 local tween_unselect
 
-script.InitHightlight.Event:Connect(function(local_player: Player, target: Player, max_dist: number)
+local function InitHighlight(local_player: Player, target: Player, max_dist: number)
 	local character = target.Character
 
 	local highlight = Instance.new("Highlight")
@@ -49,7 +50,7 @@ script.InitHightlight.Event:Connect(function(local_player: Player, target: Playe
 		local t = math.clamp(dist / max_dist, 0, 1)
 
 		if dist > max_dist then
-			print(script.Name..": max > max_dist, exiting")
+			print(script.Name .. ": max > max_dist, exiting")
 			toggle = false
 			toggleEvent:Fire()
 		elseif t <= 0.5 then
@@ -60,15 +61,21 @@ script.InitHightlight.Event:Connect(function(local_player: Player, target: Playe
 			highlight.FillColor = Color3.new(1, 1, 0):Lerp(Color3.new(1, 0, 0), t)
 		end
 	end
-end)
+end
 
 Mouse.Button1Down:Connect(function()
-	if not Mouse.Target then return end
+	if not Mouse.Target then
+		return
+	end
 	local Part = Mouse.Target
-	if Part:FindFirstAncestorWhichIsA("Model") then Character = Part:FindFirstAncestorWhichIsA("Model") end
+	if Part:FindFirstAncestorWhichIsA("Model") then
+		Character = Part:FindFirstAncestorWhichIsA("Model")
+	end
 
 	if Character and game.Players:GetPlayerFromCharacter(Character) then
-		if cd then return end
+		if cd then
+			return
+		end
 
 		toggle = not toggle
 
@@ -76,35 +83,61 @@ Mouse.Button1Down:Connect(function()
 		-- example, 0.9 = C / 24, 21.6 = C
 		-- meaning scale = 21.6 / length
 		-- multiply it by 10^-1 to get the actual scale
-		tween_select = TS:Create(Character.Head:FindFirstChild("Tag").Container.Select, tInfo_select, { Size = UDim2.new((21.6 / #Character.Head:FindFirstChild("Tag").Container.Primary.Text) * 10^-1, 0, 0.02, 0) })
-		tween_unselect = TS:Create(Character.Head:FindFirstChild("Tag").Container.Select, tInfo_select, { Size = UDim2.new(0, 0, 0.02, 0) })
+		tween_select = TS:Create(
+			Character.Head:FindFirstChild("Tag").Container.Select,
+			tInfo_select,
+			{
+				Size = UDim2.new(
+					(21.6 / #Character.Head:FindFirstChild("Tag").Container.Primary.Text) * 10 ^ -1,
+					0,
+					0.02,
+					0
+				),
+			}
+		)
+		tween_unselect = TS:Create(
+			Character.Head:FindFirstChild("Tag").Container.Select,
+			tInfo_select,
+			{ Size = UDim2.new(0, 0, 0.02, 0) }
+		)
 
 		local PlayerTargeted = game.Players:GetPlayerFromCharacter(Character)
 
 		local dist = Player:DistanceFromCharacter(Character:FindFirstChild("HumanoidRootPart").Position)
-		if dist > max_dist then return end
+		if dist > max_dist then
+			return
+		end
 
 		if previousPlayer == "" then
-			previousPlayer = PlayerTargeted.Name 
+			previousPlayer = PlayerTargeted.Name
 		elseif previousPlayer ~= "" and previousPlayer ~= PlayerTargeted.Name then
 			typewrite(Character.Head:FindFirstChild("Tag").Container.Bar.BarEntry, cache[previousPlayer], 0.15)
 			previousPlayer = PlayerTargeted.Name
 		end
 
 		local tag = Character.Head:FindFirstChild("Tag")
-		if not tag then return end
+		if not tag then
+			return
+		end
 
-		local bar = tag.Container:WaitForChild('Bar')
+		local bar = tag.Container:WaitForChild("Bar")
 
-		if PlayerTargeted:FindFirstChild("barrank_value") and PlayerTargeted:FindFirstChild("barrank_value").Value ~= "" then
+		if
+			PlayerTargeted:FindFirstChild("barrank_value")
+			and PlayerTargeted:FindFirstChild("barrank_value").Value ~= ""
+		then
 			if toggle == true then
-				if not cache[PlayerTargeted.Name] then cache[PlayerTargeted.Name] = bar.BarEntry.Text end
+				if not cache[PlayerTargeted.Name] then
+					cache[PlayerTargeted.Name] = bar.BarEntry.Text
+				end
 				tween_select:Play()
-				script.InitHightlight:Fire(Player, PlayerTargeted, max_dist)
+				task.spawn(InitHighlight, Player, PlayerTargeted, max_dist)
 				typewrite(bar.BarEntry, PlayerTargeted.barrank_value.Value, 0.25)
 			else
-				for _,v in pairs(Character:GetChildren()) do
-					if v:IsA("Highlight") then v:Destroy() end
+				for _, v in pairs(Character:GetChildren()) do
+					if v:IsA("Highlight") then
+						v:Destroy()
+					end
 				end
 				tween_unselect:Play()
 				typewrite(bar.BarEntry, cache[PlayerTargeted.Name], 0.25)
@@ -112,7 +145,7 @@ Mouse.Button1Down:Connect(function()
 		end
 
 		cooldownThing()
-		print("done - toggle: "..tostring(toggle))
+		print("done - toggle: " .. tostring(toggle))
 	end
 end)
 
@@ -120,11 +153,13 @@ toggleEvent.Event:Connect(function()
 	local PlayerTargeted = game.Players:GetPlayerFromCharacter(Character)
 
 	local tag = Character.Head:FindFirstChild("Tag")
-	local bar = tag.Container:WaitForChild('Bar')
+	local bar = tag.Container:WaitForChild("Bar")
 
 	if toggle == false then
-		for _,v in pairs(Character:GetChildren()) do
-			if v:IsA("Highlight") then v:Destroy() end
+		for _, v in pairs(Character:GetChildren()) do
+			if v:IsA("Highlight") then
+				v:Destroy()
+			end
 		end
 		tween_unselect:Play()
 		typewrite(bar.BarEntry, cache[PlayerTargeted.Name], 0.25)
