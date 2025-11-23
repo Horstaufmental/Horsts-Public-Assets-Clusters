@@ -189,7 +189,7 @@ local function onCharacterAdded(character)
 	local bar = tag.Container:WaitForChild('Bar')
 
 	local barrank_value
-	if not player:FindFirstChild("ranktag_barrank") then
+	if not player:FindFirstChild("barrank_value") then
 		barrank_value = Instance.new("StringValue")
 		barrank_value.Name = "barrank_value"
 		barrank_value.Parent = player
@@ -276,7 +276,7 @@ local function onCharacterAdded(character)
 		end
 
 		if bar_rank and bar_rank ~= "" then
-			local vl:StringValue = player:FindFirstChild("ranktag_barrank")
+			local vl:StringValue = player:FindFirstChild("barrank_value")
 			if not vl then
 				vl = Instance.new("StringValue")
 				vl.Name = "barrank_value"

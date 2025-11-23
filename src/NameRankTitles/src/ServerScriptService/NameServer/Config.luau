@@ -60,6 +60,6 @@ Config.divisions = {
 	}
 }
 
-Config.VERSION = "1.2.0-alpha"
+Config.VERSION = "DEVELOPMENT-MAIN"
 
 return Config
