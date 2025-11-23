@@ -178,10 +178,20 @@ local function onCharacterAdded(character)
 	-- When a character spawns or respawns
 	local head = character:WaitForChild('Head')
 	local team = player.Team
-
-	local groupIdVal = team:FindFirstChild("groupID")
-	if not groupIdVal then warn("Missing 'groupID' IntValue for Team"..team.Name) end
-	local playerRank = player:GetRoleInGroup(groupIdVal.Value)
+	
+	local groupIdVal
+	local playerRank
+	if team then
+		groupIdVal = team:FindFirstChild("groupID")
+		if not groupIdVal then 
+			warn("Missing 'groupID' IntValue for Team"..team.Name)
+			playerRank = "Guest"
+		else
+			playerRank = player:GetRoleInGroup(groupIdVal.Value)
+		end
+	else
+		playerRank = "Guest"
+	end
 
 	local tag = rank:Clone()
 	local user = tag.Container:WaitForChild('Primary')
@@ -198,13 +208,17 @@ local function onCharacterAdded(character)
 
 	user.Text = playerName
 	rankClone.Text = playerRank
-	user.TextColor3 = team.TeamColor.Color
+	if team then
+		user.TextColor3 = team.TeamColor.Color
+	else
+		user.TextColor3 = Color3.fromRGB(255, 255, 255)
+	end
 	rankClone.TextColor3 = Color3.fromRGB(255, 255, 255)
 
 	local highest_division = nil
 
 	for k,v in pairs(divisions) do -- 1st level, factions
-		if team.Name ~= k then
+		if team and team.Name ~= k then
 			continue
 		end
 
@@ -314,6 +328,7 @@ end
 
 updateTrelloCache();
 
+-- NOTE: the event may not fire when playtesting it on studio, use "Clients and Servers" or test on actual game if possible
 Players.PlayerAdded:Connect(function(player)
 	-- Connect the event for future character spawns
 	player.CharacterAdded:Connect(onCharacterAdded)
