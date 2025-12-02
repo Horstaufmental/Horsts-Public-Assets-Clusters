@@ -2,7 +2,7 @@
 	<Meta name="ExplicitAutoJoints">true</Meta>
 	<External>null</External>
 	<External>nil</External>
-	<Item class="BillboardGui" referent="RBXDEF7BC36B6344F8D8F8B37D34148CF2B">
+	<Item class="BillboardGui" referent="RBX1DB562D1B83540998BB7E52C1C23A9C3">
 		<Properties>
 			<bool name="Active">true</bool>
 			<Ref name="Adornee">null</Ref>
@@ -61,7 +61,7 @@
 			<int64 name="SourceAssetId">-1</int64>
 			<BinaryString name="Tags"></BinaryString>
 		</Properties>
-		<Item class="Frame" referent="RBXDBEB81F57E64413D904BDF859BB03584">
+		<Item class="Frame" referent="RBX7DE7FF2B46964100976188EA2C874F43">
 			<Properties>
 				<token name="Style">0</token>
 				<bool name="Active">false</bool>
@@ -124,7 +124,7 @@
 				<int64 name="SourceAssetId">-1</int64>
 				<BinaryString name="Tags"></BinaryString>
 			</Properties>
-			<Item class="TextLabel" referent="RBX494715DA50AA4828B336BF2AEF28CDF7">
+			<Item class="TextLabel" referent="RBX01D726AFB28F4CC6B7456C23597C4518">
 				<Properties>
 					<Font name="FontFace">
 						<Family><url>rbxasset://fonts/families/GothamSSm.json</url></Family>
@@ -218,7 +218,7 @@
 					<int64 name="SourceAssetId">-1</int64>
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
-				<Item class="UIGradient" referent="RBX049B18A194374352BEBE2BE79DC6D070">
+				<Item class="UIGradient" referent="RBX547C3C12B65C47358CE74BF16B5D5D27">
 					<Properties>
 						<ColorSequence name="Color">0 1 1 1 0 1 1 1 1 0 </ColorSequence>
 						<bool name="Enabled">true</bool>
@@ -236,7 +236,7 @@
 						<BinaryString name="Tags"></BinaryString>
 					</Properties>
 				</Item>
-				<Item class="ImageLabel" referent="RBXC9E51D3F97724C18A285382F1CB43EF1">
+				<Item class="ImageLabel" referent="RBX349D3F07F57A43B296DFA5241732BE4B">
 					<Properties>
 						<Content name="Image"><null></null></Content>
 						<Color3 name="ImageColor3">
@@ -334,7 +334,7 @@
 					</Properties>
 				</Item>
 			</Item>
-			<Item class="ImageLabel" referent="RBX2BEDED71433B4D0F84568FDB8D842E30">
+			<Item class="ImageLabel" referent="RBX77853247FA8A48E2847D77AF23772654">
 				<Properties>
 					<Content name="Image"><url>http://www.roblox.com/asset/?id=6022668881</url></Content>
 					<Color3 name="ImageColor3">
@@ -431,7 +431,7 @@
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="TextLabel" referent="RBX9BDCB1379059458286E5895F10CA3301">
+			<Item class="TextLabel" referent="RBX7F3A8165342A4B8A9244D74F88736809">
 				<Properties>
 					<Font name="FontFace">
 						<Family><url>rbxasset://fonts/families/SourceSansPro.json</url></Family>
@@ -525,7 +525,7 @@
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="Frame" referent="RBX88848810EDC54D1C97586AEDA3086352">
+			<Item class="Frame" referent="RBX4AE3CB4CE1DA444C89C217EB0395AC84">
 				<Properties>
 					<token name="Style">0</token>
 					<bool name="Active">false</bool>
@@ -588,9 +588,15 @@
 					<int64 name="SourceAssetId">-1</int64>
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
-				<Item class="Script" referent="RBX7E1CCDF62730452880A4892B365C881E">
+				<Item class="Script" referent="RBX41A216545EB44DC5A250FB9634EA6D1B">
 					<Properties>
-						<ProtectedString name="Source"><![CDATA[local TS = game:GetService("TweenService")
+						<ProtectedString name="Source"><![CDATA[--[[
+    Copyright (c) 2025 Horstaufmental
+    SPDX-License-Identifier: MPL-2.0
+
+    to be placed under NameServer.Tag.Container.Health
+]]--
+local TS = game:GetService("TweenService")
 local tInfo = TweenInfo.new(0.15, Enum.EasingStyle.Sine, Enum.EasingDirection.Out)
 
 local char = script.Parent.Parent.Parent.Parent.Parent
@@ -606,10 +612,10 @@ local function updateHealthBar()
 
 	local healthFrame = script.Parent
 	local healthBar = healthFrame.Bar
-	
+
 	local goal = {}
 	goal.Size = UDim2.new(healthpoints, 0, 1, 0)
-	
+
 	local tween = TS:Create(healthBar, tInfo, goal)
 	tween:Play()
 
@@ -636,7 +642,7 @@ humanoid:GetPropertyChangedSignal("MaxHealth"):Connect(updateHealthBar)]]></Prot
 						<bool name="Disabled">true</bool>
 						<Content name="LinkedSource"><null></null></Content>
 						<token name="RunContext">0</token>
-						<string name="ScriptGuid">{1DF56EEB-AEA5-499A-9911-2881C83E00AB}</string>
+						<string name="ScriptGuid">{3B12B1A7-0466-41FE-8DC0-A023A6C8598D}</string>
 						<BinaryString name="AttributesSerialize"></BinaryString>
 						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 						<bool name="DefinesCapabilities">false</bool>
@@ -645,7 +651,7 @@ humanoid:GetPropertyChangedSignal("MaxHealth"):Connect(updateHealthBar)]]></Prot
 						<BinaryString name="Tags"></BinaryString>
 					</Properties>
 				</Item>
-				<Item class="UICorner" referent="RBXFA1B5AE070D64D04992365F6FDD2848C">
+				<Item class="UICorner" referent="RBXF692BC1AA5714FE382035F07E12F0F7D">
 					<Properties>
 						<UDim name="CornerRadius">
 							<S>0</S>
@@ -659,7 +665,7 @@ humanoid:GetPropertyChangedSignal("MaxHealth"):Connect(updateHealthBar)]]></Prot
 						<BinaryString name="Tags"></BinaryString>
 					</Properties>
 				</Item>
-				<Item class="UIStroke" referent="RBX71004776F81C41F3995DB3C5A464B207">
+				<Item class="UIStroke" referent="RBX98EDE85E21BA44B1AA9B4C34A19D1847">
 					<Properties>
 						<token name="ApplyStrokeMode">0</token>
 						<UDim name="BorderOffset">
@@ -686,7 +692,7 @@ humanoid:GetPropertyChangedSignal("MaxHealth"):Connect(updateHealthBar)]]></Prot
 						<BinaryString name="Tags"></BinaryString>
 					</Properties>
 				</Item>
-				<Item class="Frame" referent="RBXC43CE8F52ECD4122B60EC1FC6B26F829">
+				<Item class="Frame" referent="RBXE03F940033CD42AB8C2FAE6138E5B722">
 					<Properties>
 						<token name="Style">0</token>
 						<bool name="Active">false</bool>
@@ -749,7 +755,7 @@ humanoid:GetPropertyChangedSignal("MaxHealth"):Connect(updateHealthBar)]]></Prot
 						<int64 name="SourceAssetId">-1</int64>
 						<BinaryString name="Tags"></BinaryString>
 					</Properties>
-					<Item class="UICorner" referent="RBX7E8BF07F0ED24C94A69B564E1EB99EDE">
+					<Item class="UICorner" referent="RBX8956AD73F413447AA752D8C77A238B96">
 						<Properties>
 							<UDim name="CornerRadius">
 								<S>0</S>
@@ -763,7 +769,7 @@ humanoid:GetPropertyChangedSignal("MaxHealth"):Connect(updateHealthBar)]]></Prot
 							<BinaryString name="Tags"></BinaryString>
 						</Properties>
 					</Item>
-					<Item class="UIStroke" referent="RBX0834FA5E686741C2A4D9BBCC611AFAB5">
+					<Item class="UIStroke" referent="RBX8BD6890E534948229F78D1B5D79ECAA7">
 						<Properties>
 							<token name="ApplyStrokeMode">0</token>
 							<UDim name="BorderOffset">
@@ -791,7 +797,7 @@ humanoid:GetPropertyChangedSignal("MaxHealth"):Connect(updateHealthBar)]]></Prot
 						</Properties>
 					</Item>
 				</Item>
-				<Item class="Frame" referent="RBXA26C0419194148B4817B3EDD67F9F9FF">
+				<Item class="Frame" referent="RBX1BA93503FA354C1889BCB268A5935B00">
 					<Properties>
 						<token name="Style">0</token>
 						<bool name="Active">false</bool>
@@ -856,7 +862,7 @@ humanoid:GetPropertyChangedSignal("MaxHealth"):Connect(updateHealthBar)]]></Prot
 					</Properties>
 				</Item>
 			</Item>
-			<Item class="Frame" referent="RBX8629601460BA4B29814C63FAC5B19CB5">
+			<Item class="Frame" referent="RBX95483B74D1FB40BFBD201314260FF54A">
 				<Properties>
 					<token name="Style">0</token>
 					<bool name="Active">false</bool>
@@ -919,7 +925,7 @@ humanoid:GetPropertyChangedSignal("MaxHealth"):Connect(updateHealthBar)]]></Prot
 					<int64 name="SourceAssetId">-1</int64>
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
-				<Item class="UICorner" referent="RBXC433508EB8FE43F780625AAFE4380D0A">
+				<Item class="UICorner" referent="RBXEC13F4D9BE6A4130B96E32BDEEF4F397">
 					<Properties>
 						<UDim name="CornerRadius">
 							<S>0</S>
@@ -933,7 +939,7 @@ humanoid:GetPropertyChangedSignal("MaxHealth"):Connect(updateHealthBar)]]></Prot
 						<BinaryString name="Tags"></BinaryString>
 					</Properties>
 				</Item>
-				<Item class="TextLabel" referent="RBX651BC2AE520D4EFBAADC2DD429A1E2F1">
+				<Item class="TextLabel" referent="RBXC0301D53BA8D4BDEB8AE4B9C21076A0E">
 					<Properties>
 						<Font name="FontFace">
 							<Family><url>rbxasset://fonts/families/SourceSansPro.json</url></Family>
@@ -1027,7 +1033,7 @@ humanoid:GetPropertyChangedSignal("MaxHealth"):Connect(updateHealthBar)]]></Prot
 						<int64 name="SourceAssetId">-1</int64>
 						<BinaryString name="Tags"></BinaryString>
 					</Properties>
-					<Item class="UIGradient" referent="RBX3D1C5487C7AC4F54945EA33D85A39C28">
+					<Item class="UIGradient" referent="RBX90A69259D14B4593A1322FC0A9E8E418">
 						<Properties>
 							<ColorSequence name="Color">0 1 1 1 0 1 1 1 1 0 </ColorSequence>
 							<bool name="Enabled">true</bool>
@@ -1046,104 +1052,7 @@ humanoid:GetPropertyChangedSignal("MaxHealth"):Connect(updateHealthBar)]]></Prot
 						</Properties>
 					</Item>
 				</Item>
-				<Item class="ImageLabel" referent="RBX1185223B03654F259D50BADF5479A17A">
-					<Properties>
-						<Content name="Image"><null></null></Content>
-						<Color3 name="ImageColor3">
-							<R>1</R>
-							<G>1</G>
-							<B>1</B>
-						</Color3>
-						<Vector2 name="ImageRectOffset">
-							<X>0</X>
-							<Y>0</Y>
-						</Vector2>
-						<Vector2 name="ImageRectSize">
-							<X>0</X>
-							<Y>0</Y>
-						</Vector2>
-						<float name="ImageTransparency">0</float>
-						<token name="ResampleMode">0</token>
-						<token name="ScaleType">3</token>
-						<Rect2D name="SliceCenter">
-							<min>
-								<X>0</X>
-								<Y>0</Y>
-							</min>
-							<max>
-								<X>0</X>
-								<Y>0</Y>
-							</max>
-						</Rect2D>
-						<float name="SliceScale">1</float>
-						<UDim2 name="TileSize">
-							<XS>1</XS>
-							<XO>0</XO>
-							<YS>1</YS>
-							<YO>0</YO>
-						</UDim2>
-						<bool name="Active">true</bool>
-						<Vector2 name="AnchorPoint">
-							<X>0.5</X>
-							<Y>0.5</Y>
-						</Vector2>
-						<token name="AutomaticSize">0</token>
-						<Color3 name="BackgroundColor3">
-							<R>1</R>
-							<G>1</G>
-							<B>1</B>
-						</Color3>
-						<float name="BackgroundTransparency">1</float>
-						<Color3 name="BorderColor3">
-							<R>0.105882362</R>
-							<G>0.164705887</G>
-							<B>0.207843155</B>
-						</Color3>
-						<token name="BorderMode">0</token>
-						<int name="BorderSizePixel">1</int>
-						<bool name="ClipsDescendants">false</bool>
-						<bool name="Draggable">false</bool>
-						<bool name="Interactable">true</bool>
-						<int name="LayoutOrder">0</int>
-						<Ref name="NextSelectionDown">null</Ref>
-						<Ref name="NextSelectionLeft">null</Ref>
-						<Ref name="NextSelectionRight">null</Ref>
-						<Ref name="NextSelectionUp">null</Ref>
-						<UDim2 name="Position">
-							<XS>0.99000001</XS>
-							<XO>0</XO>
-							<YS>0.479999989</YS>
-							<YO>0</YO>
-						</UDim2>
-						<float name="Rotation">0</float>
-						<bool name="Selectable">false</bool>
-						<Ref name="SelectionImageObject">null</Ref>
-						<int name="SelectionOrder">0</int>
-						<UDim2 name="Size">
-							<XS>0.189999998</XS>
-							<XO>0</XO>
-							<YS>1.29999995</YS>
-							<YO>0</YO>
-						</UDim2>
-						<token name="SizeConstraint">0</token>
-						<bool name="Visible">true</bool>
-						<int name="ZIndex">2</int>
-						<bool name="AutoLocalize">true</bool>
-						<Ref name="RootLocalizationTable">null</Ref>
-						<token name="SelectionBehaviorDown">0</token>
-						<token name="SelectionBehaviorLeft">0</token>
-						<token name="SelectionBehaviorRight">0</token>
-						<token name="SelectionBehaviorUp">0</token>
-						<bool name="SelectionGroup">false</bool>
-						<BinaryString name="AttributesSerialize"></BinaryString>
-						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
-						<bool name="DefinesCapabilities">false</bool>
-						<string name="Name">Rank</string>
-						<int64 name="SourceAssetId">-1</int64>
-						<BinaryString name="Tags"></BinaryString>
-					</Properties>
-				</Item>
-				<Item class="ImageLabel" referent="RBXFA034090A6734EA9888092A0240EB335">
+				<Item class="ImageLabel" referent="RBX9630D039B6A94C028A121289C1FD6EE2">
 					<Properties>
 						<Content name="Image"><url>rbxassetid://131549281561184</url></Content>
 						<Color3 name="ImageColor3">
@@ -1240,7 +1149,7 @@ humanoid:GetPropertyChangedSignal("MaxHealth"):Connect(updateHealthBar)]]></Prot
 						<BinaryString name="Tags"></BinaryString>
 					</Properties>
 				</Item>
-				<Item class="UIGradient" referent="RBX7653D204BF074B62B26DBD42286FD5DE">
+				<Item class="UIGradient" referent="RBX59989C8F677B4EE899B8D6465143738C">
 					<Properties>
 						<ColorSequence name="Color">0 1 1 1 0 1 1 1 1 0 </ColorSequence>
 						<bool name="Enabled">true</bool>
@@ -1258,7 +1167,7 @@ humanoid:GetPropertyChangedSignal("MaxHealth"):Connect(updateHealthBar)]]></Prot
 						<BinaryString name="Tags"></BinaryString>
 					</Properties>
 				</Item>
-				<Item class="ImageLabel" referent="RBXC93E23734CF24F57BFAD8F883A18E30D">
+				<Item class="ImageLabel" referent="RBX604AA8FCAB4145738DD08D4A85E7931E">
 					<Properties>
 						<Content name="Image"><url>http://www.roblox.com/asset/?id=6035078889</url></Content>
 						<Color3 name="ImageColor3">
@@ -1356,7 +1265,7 @@ humanoid:GetPropertyChangedSignal("MaxHealth"):Connect(updateHealthBar)]]></Prot
 					</Properties>
 				</Item>
 			</Item>
-			<Item class="Frame" referent="RBXDAF902ABF2494582B4AF2AD2E2C688D1">
+			<Item class="Frame" referent="RBXDA8FC2047F304B6FA8942D39F0CA8B6F">
 				<Properties>
 					<token name="Style">0</token>
 					<bool name="Active">false</bool>
@@ -1419,7 +1328,7 @@ humanoid:GetPropertyChangedSignal("MaxHealth"):Connect(updateHealthBar)]]></Prot
 					<int64 name="SourceAssetId">-1</int64>
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
-				<Item class="UIGradient" referent="RBXD393996A0EBC436E80AB4BD3F91987B0">
+				<Item class="UIGradient" referent="RBX442CD2C682674C6EBD4B99553DF9A26F">
 					<Properties>
 						<ColorSequence name="Color">0 1 1 1 0 1 1 1 1 0 </ColorSequence>
 						<bool name="Enabled">true</bool>
@@ -1438,7 +1347,7 @@ humanoid:GetPropertyChangedSignal("MaxHealth"):Connect(updateHealthBar)]]></Prot
 					</Properties>
 				</Item>
 			</Item>
-			<Item class="Frame" referent="RBX1EAFAE46435B49B5B680A1EED8A7F9F0">
+			<Item class="Frame" referent="RBX7C40C4D7C655499CA38BA5911BBC73F9">
 				<Properties>
 					<token name="Style">0</token>
 					<bool name="Active">false</bool>
@@ -1501,7 +1410,7 @@ humanoid:GetPropertyChangedSignal("MaxHealth"):Connect(updateHealthBar)]]></Prot
 					<int64 name="SourceAssetId">-1</int64>
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
-				<Item class="TextLabel" referent="RBX2B58254C598D44BDA37E7ED416F34812">
+				<Item class="TextLabel" referent="RBX33AB935794A8475EA003F570229D27BD">
 					<Properties>
 						<Font name="FontFace">
 							<Family><url>rbxasset://fonts/families/GothamSSm.json</url></Family>
@@ -1595,7 +1504,7 @@ humanoid:GetPropertyChangedSignal("MaxHealth"):Connect(updateHealthBar)]]></Prot
 						<int64 name="SourceAssetId">-1</int64>
 						<BinaryString name="Tags"></BinaryString>
 					</Properties>
-					<Item class="UIGradient" referent="RBX96E6B9C8D24648058064EF51BAB10FD0">
+					<Item class="UIGradient" referent="RBX092CC20429D84B2DAAB02FA782C5DBCF">
 						<Properties>
 							<ColorSequence name="Color">0 1 1 1 0 1 1 1 1 0 </ColorSequence>
 							<bool name="Enabled">true</bool>
@@ -1614,7 +1523,7 @@ humanoid:GetPropertyChangedSignal("MaxHealth"):Connect(updateHealthBar)]]></Prot
 						</Properties>
 					</Item>
 				</Item>
-				<Item class="ImageLabel" referent="RBX0646D01D5F7145E7963344AF2BB3325C">
+				<Item class="ImageLabel" referent="RBXC20D4CC5604D4753B6B9C2397BAB5EFE">
 					<Properties>
 						<Content name="Image"><url>http://www.roblox.com/asset/?id=6035047381</url></Content>
 						<Color3 name="ImageColor3">
@@ -1712,7 +1621,7 @@ humanoid:GetPropertyChangedSignal("MaxHealth"):Connect(updateHealthBar)]]></Prot
 					</Properties>
 				</Item>
 			</Item>
-			<Item class="ImageLabel" referent="RBXAD7C2F87135542C78A512D580EC461B6">
+			<Item class="ImageLabel" referent="RBX1982E5CB333A427BBD3CA8571F55C9C7">
 				<Properties>
 					<Content name="Image"><url>http://www.roblox.com/asset/?id=6023426904</url></Content>
 					<Color3 name="ImageColor3">
@@ -1809,7 +1718,7 @@ humanoid:GetPropertyChangedSignal("MaxHealth"):Connect(updateHealthBar)]]></Prot
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="Frame" referent="RBX1088123A57AB4FCC940622BD8A746007">
+			<Item class="Frame" referent="RBXE391EDF1A0F14C39B34FD0362E831B0E">
 				<Properties>
 					<token name="Style">0</token>
 					<bool name="Active">false</bool>
@@ -1872,7 +1781,7 @@ humanoid:GetPropertyChangedSignal("MaxHealth"):Connect(updateHealthBar)]]></Prot
 					<int64 name="SourceAssetId">-1</int64>
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
-				<Item class="TextLabel" referent="RBXA949E48365194DDBB1E273B285DC5A46">
+				<Item class="TextLabel" referent="RBXBFA497B4DDAC42D39E1C511614990CC8">
 					<Properties>
 						<Font name="FontFace">
 							<Family><url>rbxasset://fonts/families/GothamSSm.json</url></Family>
@@ -1966,7 +1875,7 @@ humanoid:GetPropertyChangedSignal("MaxHealth"):Connect(updateHealthBar)]]></Prot
 						<int64 name="SourceAssetId">-1</int64>
 						<BinaryString name="Tags"></BinaryString>
 					</Properties>
-					<Item class="UIGradient" referent="RBX29E6CFB52B8842A69FCD2C42D4F11F6F">
+					<Item class="UIGradient" referent="RBX0769F440B7D64659945426306C34A430">
 						<Properties>
 							<ColorSequence name="Color">0 1 1 1 0 1 1 1 1 0 </ColorSequence>
 							<bool name="Enabled">true</bool>
@@ -1985,6 +1894,103 @@ humanoid:GetPropertyChangedSignal("MaxHealth"):Connect(updateHealthBar)]]></Prot
 						</Properties>
 					</Item>
 				</Item>
+			</Item>
+			<Item class="ImageLabel" referent="RBXB08396B9940B43B4B38CF89A505EF5B9">
+				<Properties>
+					<Content name="Image"><url>rbxassetid://14842204514</url></Content>
+					<Color3 name="ImageColor3">
+						<R>1</R>
+						<G>1</G>
+						<B>1</B>
+					</Color3>
+					<Vector2 name="ImageRectOffset">
+						<X>0</X>
+						<Y>0</Y>
+					</Vector2>
+					<Vector2 name="ImageRectSize">
+						<X>0</X>
+						<Y>0</Y>
+					</Vector2>
+					<float name="ImageTransparency">0</float>
+					<token name="ResampleMode">0</token>
+					<token name="ScaleType">3</token>
+					<Rect2D name="SliceCenter">
+						<min>
+							<X>0</X>
+							<Y>0</Y>
+						</min>
+						<max>
+							<X>0</X>
+							<Y>0</Y>
+						</max>
+					</Rect2D>
+					<float name="SliceScale">1</float>
+					<UDim2 name="TileSize">
+						<XS>1</XS>
+						<XO>0</XO>
+						<YS>1</YS>
+						<YO>0</YO>
+					</UDim2>
+					<bool name="Active">true</bool>
+					<Vector2 name="AnchorPoint">
+						<X>0.5</X>
+						<Y>0.5</Y>
+					</Vector2>
+					<token name="AutomaticSize">0</token>
+					<Color3 name="BackgroundColor3">
+						<R>1</R>
+						<G>1</G>
+						<B>1</B>
+					</Color3>
+					<float name="BackgroundTransparency">1</float>
+					<Color3 name="BorderColor3">
+						<R>0.105882362</R>
+						<G>0.164705887</G>
+						<B>0.207843155</B>
+					</Color3>
+					<token name="BorderMode">0</token>
+					<int name="BorderSizePixel">1</int>
+					<bool name="ClipsDescendants">false</bool>
+					<bool name="Draggable">false</bool>
+					<bool name="Interactable">true</bool>
+					<int name="LayoutOrder">0</int>
+					<Ref name="NextSelectionDown">null</Ref>
+					<Ref name="NextSelectionLeft">null</Ref>
+					<Ref name="NextSelectionRight">null</Ref>
+					<Ref name="NextSelectionUp">null</Ref>
+					<UDim2 name="Position">
+						<XS>0.499000013</XS>
+						<XO>0</XO>
+						<YS>0.620000005</YS>
+						<YO>0</YO>
+					</UDim2>
+					<float name="Rotation">0</float>
+					<bool name="Selectable">false</bool>
+					<Ref name="SelectionImageObject">null</Ref>
+					<int name="SelectionOrder">0</int>
+					<UDim2 name="Size">
+						<XS>0.108999997</XS>
+						<XO>0</XO>
+						<YS>0.280000001</YS>
+						<YO>0</YO>
+					</UDim2>
+					<token name="SizeConstraint">0</token>
+					<bool name="Visible">true</bool>
+					<int name="ZIndex">2</int>
+					<bool name="AutoLocalize">true</bool>
+					<Ref name="RootLocalizationTable">null</Ref>
+					<token name="SelectionBehaviorDown">0</token>
+					<token name="SelectionBehaviorLeft">0</token>
+					<token name="SelectionBehaviorRight">0</token>
+					<token name="SelectionBehaviorUp">0</token>
+					<bool name="SelectionGroup">false</bool>
+					<BinaryString name="AttributesSerialize"></BinaryString>
+					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+					<bool name="DefinesCapabilities">false</bool>
+					<string name="Name">Rank</string>
+					<int64 name="SourceAssetId">-1</int64>
+					<BinaryString name="Tags"></BinaryString>
+				</Properties>
 			</Item>
 		</Item>
 	</Item>

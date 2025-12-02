@@ -10,8 +10,8 @@
 --[[ START OF CONFIGURATION ]]
 --
 
-local config = require("./Config.luau")
--- local config = require(script:WaitForChild("Config"))
+--local config = require("./Config.luau")
+local config = require(script:WaitForChild("Config"))
 
 local board = config.board
 local key = config.key
@@ -27,16 +27,16 @@ local divisions = config.divisions
 --[[
 
 	Trello cards should be formatted like following:
-	
+
 	Card Name: Username
 	1st Line: Top Line of Name
-	2nd Line: Bottom Line of Name 
+	2nd Line: Bottom Line of Name
 	3rd Line: R,G,B colour for the title. (input N/A if undesired)
 	4th Line: Division Bar Text
 	5th Line: Division Bar Rank (input N/A if undesired)
 	6th Line: Division Bar Color
 	7th Line: Division Bar Logo
-	
+
 --]]
 
 --[[ Setting Important Stuff ]]
@@ -240,7 +240,7 @@ local function onCharacterAdded(character)
 							or (parsed.type == "range" and (plrRank <= parsed.min and plrRank >= parsed.max) == false)
 							or (parsed.type == "equal" and plrRank ~= parsed.value)
 						then
-							break
+							continue
 						end
 
 						if ve[2] ~= nil then
@@ -256,7 +256,7 @@ local function onCharacterAdded(character)
 			end
 		end
 		if playerRank == nil then
-			playerRank = playerRank:GetRoleInGroup(groupIdVal.Value)
+			playerRank = player:GetRoleInGroup(groupIdVal.Value)
 		end
 	else
 		playerRank = "Guest"
@@ -278,8 +278,9 @@ local function onCharacterAdded(character)
 	user.Text = playerName
 	rankClone.Text = playerRank
 	if rankIcon ~= nil then
-		bar.Rank.Image = rankIcon
-		bar.Rank.Position = UDim2.new(0.499, 0, 0.48, 0)
+		tag.Container.Rank.Visible = true
+		tag.Container.Rank.Image = rankIcon
+		tag.Container.Rank.Position = UDim2.new(0.499, 0, 0.62, 0)
 		user.Position = UDim2.new(0.5, 0, -0.05, 0)
 		rankClone.Position = UDim2.new(0.5, 0, 0.26, 0)
 	end
@@ -337,7 +338,7 @@ local function onCharacterAdded(character)
 		bar.Visible = true
 		user.Position = UDim2.new(0.5, 0, -0.05, 0)
 		rankClone.Position = UDim2.new(0.5, 0, 0.26, 0)
-		bar.Rank.Position = Udim2.new(0.99, 0, 0.48, 0)
+		tag.Container.Rank.Position = UDim2.new(0.735, 0, 0.62, 0)
 
 		bar.BarEntry.Text = highest_division[2]
 		barrank_value.Value = highest_division[3]
