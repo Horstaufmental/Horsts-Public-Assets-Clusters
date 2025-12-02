@@ -4,11 +4,14 @@
 
 	Originally made by K_ieraH and Nucl3arPlayz
 	Modified by Horstaufmental
-]]--
+]]
+--
 
---[[ START OF CONFIGURATION ]]--
+--[[ START OF CONFIGURATION ]]
+--
 
-local config = require(script:WaitForChild("Config"))
+local config = require("./Config.luau")
+-- local config = require(script:WaitForChild("Config"))
 
 local board = config.board
 local key = config.key
@@ -16,9 +19,11 @@ local token = config.token
 local listName = config.listName
 local divisions = config.divisions
 
---[[ END OF CONFIGURATION ]]--
+--[[ END OF CONFIGURATION ]]
+--
 
---[[ Tutorial Stuff ]]--
+--[[ Tutorial Stuff ]]
+--
 --[[
 
 	Trello cards should be formatted like following:
@@ -34,41 +39,75 @@ local divisions = config.divisions
 	
 --]]
 
---[[ Setting Important Stuff ]]--
+--[[ Setting Important Stuff ]]
+--
 
 game.StarterPlayer.NameDisplayDistance = 0
 game.StarterPlayer.HealthDisplayDistance = 0
 
---[[ END OF IMPORTANT STUFF ]]--
+--[[ END OF IMPORTANT STUFF ]]
+--
 
 -- Setting up variables & services
-local url = "https://api.trello.com/1/boards/" .. board .. "/lists?cards=open&card_fields=name,desc&filter=open&fields=name&key=" .. key .. "&token=" .. token;
-local rank = script:WaitForChild('Tag')
-local http = game:GetService("HttpService");
+local url = "https://api.trello.com/1/boards/"
+	.. board
+	.. "/lists?cards=open&card_fields=name,desc&filter=open&fields=name&key="
+	.. key
+	.. "&token="
+	.. token
+local rank = script:WaitForChild("Tag")
+local http = game:GetService("HttpService")
 local Players = game:GetService("Players")
 
 -- Declaring cache variable for use by update and get rank object
-local cache;
+local cache
 
 function replaceVars(player, input)
-	local down = string.lower(input);
-	local hasGroupRole, endOf = string.find(down, "#grouprole:");
+	local down = string.lower(input)
+	local hasGroupRole, endOf = string.find(down, "#grouprole:")
 
-	if (hasGroupRole ~= nil) then
-		local cut = string.sub(down, endOf + 1);
-		local groupId = string.sub(cut, 1, string.find(cut, "#") - 1);
+	if hasGroupRole ~= nil then
+		local cut = string.sub(down, endOf + 1)
+		local groupId = string.sub(cut, 1, string.find(cut, "#") - 1)
 
-		input = string.gsub(input, string.sub(input, endOf - 10, endOf + string.len(groupId) + 1), player:GetRoleInGroup(tonumber(groupId)));
+		input = string.gsub(
+			input,
+			string.sub(input, endOf - 10, endOf + string.len(groupId) + 1),
+			player:GetRoleInGroup(tonumber(groupId))
+		)
 	end
 
-	input = string.gsub(input, "#username#", player.Name);
+	input = string.gsub(input, "#username#", player.Name)
 
-	return input;
+	return input
+end
+
+local function parse_ranks(str)
+	-- range based
+	local a, b = str:match("^(%-?%d+)%s*%-%s*(%-?%d+)$")
+	if a and b then
+		return { type = "range", min = tonumber(a), max = tonumber(b) }
+	end
+
+	-- greater and less than
+	local n, op = str:match("^(%-?%d+)%s*([<>])$")
+	if not n then
+		op, n = str:match("^([<>])%s*(%-?%d+)$")
+	end
+	if n and op then
+		if op == ">" then
+			return { type = "greater", value = tonumber(n) }
+		else
+			return { type = "less", value = tonumber(n) }
+		end
+	end
+
+	return { type = "equal", value = tonumber(str) }
 end
 
 function createOverheadObject(player)
-	if (cache) then
-		for i,v in ipairs(cache) do
+	if cache then
+		for i, v in ipairs(cache) do
 			local isMatch = (string.lower(v.name) == string.lower(player.Name))
 
 			-- Check for group match, e.g., "Group:12345"
@@ -164,39 +203,69 @@ function createOverheadObject(player)
 		end
 	end
 
-	return false; -- Return false if no custom title is found
+	return false -- Return false if no custom title is found
 end
 
 local function onCharacterAdded(character)
 	local player = Players:GetPlayerFromCharacter(character)
-	if not player then return end
+	if not player then
+		return
+	end
 
 	if character.Head:FindFirstChild("Tag") then
 		character.Head.Tag:Destroy()
 	end
 
 	-- When a character spawns or respawns
-	local head = character:WaitForChild('Head')
+	local head = character:WaitForChild("Head")
 	local team = player.Team
-	
+
 	local groupIdVal
 	local playerRank
+	local rankIcon = nil
 	if team then
 		groupIdVal = team:FindFirstChild("groupID")
-		if not groupIdVal then 
-			warn("Missing 'groupID' IntValue for Team"..team.Name)
+		if not groupIdVal then
+			warn("Missing 'groupID' IntValue for Team" .. team.Name)
 			playerRank = "Guest"
 		else
-			playerRank = player:GetRoleInGroup(groupIdVal.Value)
+			for k, v in pairs(config.customRanks) do -- first level: groups
+				if k == groupIdVal.Value then
+					local plrRank = player:GetRankInGroup(groupIdVal.Value)
+					for ke, ve in pairs(v) do -- second level: ranks
+						local parsed = parse_ranks(ve[1])
+						if
+							(parsed.type == "greater" and (plrRank >= parsed.value) == false)
+							or (parsed.type == "less" and (plrRank <= parsed.value) == false)
+							or (parsed.type == "range" and (plrRank <= parsed.min and plrRank >= parsed.max) == false)
+							or (parsed.type == "equal" and plrRank ~= parsed.value)
+						then
+							break
+						end
+
+						if ve[2] ~= nil then
+							playerRank = ve[2]
+						else
+							playerRank = player:GetRoleInGroup(groupIdVal.Value)
+						end
+						if ve[3] ~= nil then
+							rankIcon = ve[3]
+						end
+					end
+				end
+			end
+		end
+		if playerRank == nil then
+			playerRank = playerRank:GetRoleInGroup(groupIdVal.Value)
 		end
 	else
 		playerRank = "Guest"
 	end
 
 	local tag = rank:Clone()
-	local user = tag.Container:WaitForChild('Primary')
-	local rankClone = tag.Container:WaitForChild('Secondary')
-	local bar = tag.Container:WaitForChild('Bar')
+	local user = tag.Container:WaitForChild("Primary")
+	local rankClone = tag.Container:WaitForChild("Secondary")
+	local bar = tag.Container:WaitForChild("Bar")
 
 	local barrank_value
 	if not player:FindFirstChild("barrank_value") then
@@ -208,6 +277,12 @@ local function onCharacterAdded(character)
 
 	user.Text = playerName
 	rankClone.Text = playerRank
+	if rankIcon ~= nil then
+		bar.Rank.Image = rankIcon
+		bar.Rank.Position = UDim2.new(0.499, 0, 0.48, 0)
+		user.Position = UDim2.new(0.5, 0, -0.05, 0)
+		rankClone.Position = UDim2.new(0.5, 0, 0.26, 0)
+	end
 	if team then
 		user.TextColor3 = team.TeamColor.Color
 	else
@@ -217,20 +292,20 @@ local function onCharacterAdded(character)
 
 	local highest_division = nil
 
-	for k,v in pairs(divisions) do -- 1st level, factions
+	for k, v in pairs(divisions) do -- 1st level, factions
 		if team and team.Name ~= k then
 			continue
 		end
 
 		local oldPriority = 0
-		for ke,va in pairs(v) do -- 2nd level, divisions
+		for ke, va in pairs(v) do -- 2nd level, divisions
 			-- backward compatibility
 			local minRank = va[4] or 1
 			local maxRank = va[5] or 255
 			local curPriority = va[6] or 0
 			local curRank = player:GetRankInGroup(va[1])
 
-			if player:IsInGroup(va[1]) and ((minRank <= curRank and curRank <= maxRank)) then
+			if player:IsInGroup(va[1]) and (minRank <= curRank and curRank <= maxRank) then
 				-- sort by highest ranking
 				-- keep breaking differently in every sessions i tested
 				if highest_division == nil or curPriority >= oldPriority then
@@ -238,7 +313,11 @@ local function onCharacterAdded(character)
 						continue
 					end
 					local bgclr
-					if va[3] ~= nil then bgclr = va[3] else bgclr = team.TeamColor.Color end
+					if va[3] ~= nil then
+						bgclr = va[3]
+					else
+						bgclr = team.TeamColor.Color
+					end
 					oldPriority = curPriority
 
 					-- {rankId, BarText, BarRank, DivIcon, BackgroundColor}
@@ -247,7 +326,7 @@ local function onCharacterAdded(character)
 						ke,
 						player:GetRoleInGroup(va[1]),
 						va[2],
-						bgclr
+						bgclr,
 					}
 				end
 			end
@@ -258,6 +337,7 @@ local function onCharacterAdded(character)
 		bar.Visible = true
 		user.Position = UDim2.new(0.5, 0, -0.05, 0)
 		rankClone.Position = UDim2.new(0.5, 0, 0.26, 0)
+		bar.Rank.Position = Udim2.new(0.99, 0, 0.48, 0)
 
 		bar.BarEntry.Text = highest_division[2]
 		barrank_value.Value = highest_division[3]
@@ -267,8 +347,8 @@ local function onCharacterAdded(character)
 	end
 
 	-- Custom Titles from Trello
-	local above, below, c, Bar, bar_rank, bar_c, bar_icon = createOverheadObject(player);
-	if (above) then
+	local above, below, c, Bar, bar_rank, bar_c, bar_icon = createOverheadObject(player)
+	if above then
 		user.Text = above
 
 		if below and below ~= "" then
@@ -277,7 +357,7 @@ local function onCharacterAdded(character)
 			rankClone.Text = playerRank
 		end
 
-		if (c) then
+		if c then
 			user.TextColor3 = c
 		end
 
@@ -290,7 +370,7 @@ local function onCharacterAdded(character)
 		end
 
 		if bar_rank and bar_rank ~= "" then
-			local vl:StringValue = player:FindFirstChild("barrank_value")
+			local vl: StringValue = player:FindFirstChild("barrank_value")
 			if not vl then
 				vl = Instance.new("StringValue")
 				vl.Name = "barrank_value"
@@ -314,19 +394,19 @@ end
 
 function updateTrelloCache()
 	pcall(function()
-		local jsonResponse = http:GetAsync(url);
-		local returnedResponses = http:JSONDecode(jsonResponse);
+		local jsonResponse = http:GetAsync(url)
+		local returnedResponses = http:JSONDecode(jsonResponse)
 
-		for i,v in ipairs(returnedResponses) do
-			if (v.name == listName) then
-				cache = v.cards;
+		for i, v in ipairs(returnedResponses) do
+			if v.name == listName then
+				cache = v.cards
 				break -- Exit loop once we found our list
 			end
 		end
 	end)
 end
 
-updateTrelloCache();
+updateTrelloCache()
 
 -- NOTE: the event may not fire when playtesting it on studio, use "Clients and Servers" or test on actual game if possible
 Players.PlayerAdded:Connect(function(player)
@@ -349,7 +429,8 @@ game.ReplicatedStorage.UpdateTag.OnServerEvent:Connect(function(player)
 		onCharacterAdded(character)
 	end
 end)
-]]--
+]]
+--
 
 task.spawn(function()
 	while true do

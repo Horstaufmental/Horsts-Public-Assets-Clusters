@@ -59,6 +59,19 @@ Config.divisions = {
 		},
 	}
 }
+-- For more information, see:
+-- https://github.com/Horstaufmental/Horsts-Public-Assets-Clusters/issues/1
+Config.customRanks = {
+	[0] = { -- groupId
+		-- {"RankId", "CustomRankName", "CustomRankIcon"} -- set second/third argument to nil if undesired
+		{"50", "[E5] Sergeant Major", nil},
+		-- ex. greater/less than
+		{"200>", "Cabinet Ministers", "rbxassetid://14842204514"},
+		{"<40", "Enlisted Personnel", nil},
+		-- ex. range based
+		{"110-160", "Officers", nil}
+	}
+}
 
 Config.VERSION = "DEVELOPMENT-MAIN"
 
