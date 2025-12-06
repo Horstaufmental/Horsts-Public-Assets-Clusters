@@ -6,7 +6,7 @@
 
 Which means it's possible inside the greatest operating system of all time, TempleOS!
 
-A simple ASCII frames player made specifically to play the iconic [Bad Apple!!](https://www.youtube.com/watch?v=FtutLA63Cp8&list=RDFtutLA63Cp8&start_radio=1&pp=ygUJYmFkIGFwcGxloAcB) inside of your divine TempleOS system.
+A simple ASCII frames player made specifically to play the iconic [Bad Apple!!](https://www.youtube.com/watch?v=FtutLA63Cp8) inside of your divine TempleOS system.
 
 I only created this to kill boredom so don't expect much from it.
 
