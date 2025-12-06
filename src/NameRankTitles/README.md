@@ -18,6 +18,7 @@ A customizable overhead name tag system for Roblox with Trello integration, divi
 - **Click-to-Inspect**: Client-side interaction to view detailed player information
 - **Variable Replacement**: Dynamic text with `#username#` and `#grouprole:GROUPID#` support
 - **Priority System**: Automatically select the highest priority division for players in multiple groups
+- **Custom Group Rank Names**: Override default group rank names with custom text and icons
 
 ## Installation
 
@@ -46,6 +47,52 @@ Config.listName = "Titles"  -- Name of the list containing title cards
 3. Copy your **API Key** from the "API Key" section
 4. Click "Token" to generate a new **API Token** (must be 32 characters)
 5. Copy your board ID from the URL: `https://trello.com/b/BOARDID/board-name`
+
+### Custom Group-Wide Rank Names
+
+Customize rank names and icons for specific groups in `Config`. This provides a basic way to override default rank names without using Trello.
+
+```lua
+Config.customRanks = {
+    [groupId] = {
+        -- {"RankId", "CustomRankName", "CustomRankIcon"}
+        -- Set second/third argument to nil if undesired
+        
+        -- Regular custom rank name & icon
+        {"20", "Sergeant Major", "rbxassetid://12345"},
+        
+        -- "And above" - affects rank 100 and all higher ranks
+        {"100>", "Commanders", nil},
+        
+        -- "And below" - affects rank 10 and all lower ranks
+        {"<10", nil, "rbxassetid://54321"},
+        
+        -- Range-based - affects ranks 50 through 70
+        {"50-70", "Officers", nil},
+    },
+}
+```
+
+**Example:**
+
+```lua
+Config.customRanks = {
+    [12345678] = {
+        {"255", "Supreme Commander", "rbxassetid://98765"},
+        {"200>", "High Command", nil},
+        {"100-199", "Officers", "rbxassetid://11111"},
+        {"50-99", "NCOs", nil},
+        {"<49", "Enlisted", nil},
+    },
+}
+```
+
+**Special Keywords:**
+- `>` - All ranks above (e.g., `100>` = ranks 100+)
+- `<` - All ranks below (e.g., `<10` = ranks 1-10)
+- `-` - Range of ranks (e.g., `50-70` = ranks 50 to 70)
+
+**Note:** For more advanced customization with custom names, colors, and divisional bars, use the [Trello system](#trello-card-format) instead.
 
 ### Division Configuration
 
