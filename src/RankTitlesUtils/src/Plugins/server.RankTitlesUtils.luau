@@ -1,13 +1,11 @@
 --[[
 	Copyright (c) 2025 Horstaufmental
     SPDX-License-Identifier: MPL-2.0
-
-	RankTitlesUtils v.1.0.0
 --]]
 
 return function(Vargs)
 	local server, service = Vargs.Server, Vargs.Service
-	
+
 	--[[
 		Change this to allow the specified Admin Level and above to use the commands
 		List of admin levels can be found in your Adonis's Settings
@@ -25,7 +23,14 @@ return function(Vargs)
 		Function = function(plr: Player, args: {string})
 			for _, v in service.GetPlayers(plr, args[1], { NoFakePlayer = true }) do
 				local playerName = v.Name
+				local tag = v:FindFirstChild("tag_hidden")
+				if not tag then
+					tag = Instance.new("BoolValue")
+					tag.Parent = v
+					tag.Name = "tag_hidden"
+				end
 				game.Workspace[playerName].Head.Tag.Enabled = not (game.Workspace[playerName].Head.Tag.Enabled)
+				tag.Value = not tag.Value
 			end
 		end
 	}
