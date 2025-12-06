@@ -4,7 +4,7 @@
 
 > If something has two colors, it can play "Bad Apple!"
 
-Which means it's possible in the greatest operating system of all time, TempleOS!
+Which means it's possible inside the greatest operating system of all time, TempleOS!
 
 A simple ASCII frames player made specifically to play the iconic [Bad Apple!!](https://www.youtube.com/watch?v=FtutLA63Cp8&list=RDFtutLA63Cp8&start_radio=1&pp=ygUJYmFkIGFwcGxloAcB) inside of your divine TempleOS system.
 
