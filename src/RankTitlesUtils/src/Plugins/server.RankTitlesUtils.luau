@@ -29,8 +29,8 @@ return function(Vargs)
 					tag.Parent = v
 					tag.Name = "tag_hidden"
 				end
-				game.Workspace[playerName].Head.Tag.Enabled = not (game.Workspace[playerName].Head.Tag.Enabled)
 				tag.Value = not tag.Value
+				game.Workspace[playerName].Head.Tag.Enabled = tag.Value
 			end
 		end
 	}
