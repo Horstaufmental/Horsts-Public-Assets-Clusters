@@ -11,6 +11,7 @@ return function(Vargs)
 		List of admin levels can be found in your Adonis's Settings
 	]]--
 	local adminPerms = "Admins"
+	local hiddenState = {}
 
 	server.Commands.HideTag = {
 		Prefix = server.Settings.Prefix;	-- Prefix to use for command
@@ -21,16 +22,13 @@ return function(Vargs)
 		Fun = false;	-- Is it fun?
 		AdminLevel = adminPerms;	    -- Admin level; If using settings.CustomRanks set this to the custom rank name (eg. "Baristas")
 		Function = function(plr: Player, args: {string})
-			for _, v in service.GetPlayers(plr, args[1], { NoFakePlayer = true }) do
-				local playerName = v.Name
-				local tag = v:FindFirstChild("tag_hidden")
-				if not tag then
-					tag = Instance.new("BoolValue")
-					tag.Parent = v
-					tag.Name = "tag_hidden"
+			for _, v:Player in service.GetPlayers(plr, args[1], { NoFakePlayer = true }) do
+				local tag = v.Character.Head:WaitForChild("Tag")
+				if hiddenState[v.Name] == nil then
+					hiddenState[v.Name] = true
 				end
-				tag.Value = not tag.Value
-				game.Workspace[playerName].Head.Tag.Enabled = tag.Value
+				hiddenState[v.Name] = not hiddenState[v.Name]
+				tag.Enabled = hiddenState[v.Name] or false
 			end
 		end
 	}
@@ -191,7 +189,7 @@ return function(Vargs)
 		AdminLevel = "Players";	    -- Admin level; If using settings.CustomRanks set this to the custom rank name (eg. "Baristas")
 		Function = function(plr: Player)
 			game.ReplicatedStorage:FindFirstChild("ToggleRankTagEvent")
-				:FireClient(plr)
+				:FireClient(plr, hiddenState[plr.Name])
 		end
 	}
 end
