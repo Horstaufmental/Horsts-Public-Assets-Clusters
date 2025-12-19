@@ -231,7 +231,7 @@ local function onCharacterAdded(character)
 		else
 			for k, v in pairs(config.customRanks) do -- first level: groups
 				if k == groupIdVal.Value then
-					local plrRank = player:GetRankInGroup(groupIdVal.Value)
+					local plrRank = player:GetRankInGroupAsync(groupIdVal.Value)
 					for ke, ve in pairs(v) do -- second level: ranks
 						local parsed = parse_ranks(ve[1])
 						if
@@ -246,7 +246,7 @@ local function onCharacterAdded(character)
 						if ve[2] ~= nil then
 							playerRank = ve[2]
 						else
-							playerRank = player:GetRoleInGroup(groupIdVal.Value)
+							playerRank = player:GetRoleInGroupAsync(groupIdVal.Value)
 						end
 						if ve[3] ~= nil then
 							rankIcon = ve[3]
@@ -256,7 +256,7 @@ local function onCharacterAdded(character)
 			end
 		end
 		if playerRank == nil then
-			playerRank = player:GetRoleInGroup(groupIdVal.Value)
+			playerRank = player:GetRoleInGroupAsync(groupIdVal.Value)
 		end
 	else
 		playerRank = "Guest"
@@ -304,9 +304,9 @@ local function onCharacterAdded(character)
 			local minRank = va[4] or 1
 			local maxRank = va[5] or 255
 			local curPriority = va[6] or 0
-			local curRank = player:GetRankInGroup(va[1])
+			local curRank = player:GetRankInGroupAsync(va[1])
 
-			if player:IsInGroup(va[1]) and (minRank <= curRank and curRank <= maxRank) then
+			if player:IsInGroupAsync(va[1]) and (minRank <= curRank and curRank <= maxRank) then
 				-- sort by highest ranking
 				-- keep breaking differently in every sessions i tested
 				if highest_division == nil or curPriority >= oldPriority then
@@ -323,9 +323,9 @@ local function onCharacterAdded(character)
 
 					-- {rankId, BarText, BarRank, DivIcon, BackgroundColor}
 					highest_division = {
-						player:GetRankInGroup(va[1]),
+						player:GetRankInGroupAsync(va[1]),
 						ke,
-						player:GetRoleInGroup(va[1]),
+						player:GetRoleInGroupAsync(va[1]),
 						va[2],
 						bgclr,
 					}
