@@ -16,6 +16,8 @@ where i houses most of my assets for free public release that i've made/modified
 
 each assets will have their own corresponding tags, which can you use to navigate and find your desired target, which can be accessed [here.](https://github.com/Horstaufmental/Horsts-Public-Assets-Clusters/tags)
 
+**NOTE:** Only the binaries for the latest versions will be available, you'll have to download the source file from a specific tag then set them up yourself if you wanted to use a older version.
+
 the source code of each assets are available in `src/ASSETNAME_CHANGEME`
 
 # License
