@@ -1,0 +1,159 @@
+--[[
+    Copyright (c) 2025 Horstaufmental
+    SPDX-License-Identifier: MPL-2.0
+]]--
+
+local Players = game:GetService("Players")
+local TS = game:GetService("TweenService")
+local tInfo_select = TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.Out)
+
+local Character
+local tween_select
+local tween_unselect
+
+local toggle = false
+local cd = false
+
+local cache = {}
+local previousPlayer = ""
+
+local function cooldownThing()
+	cd = true
+	task.wait(0.35)
+	cd = false
+end
+
+local function typewrite(label, text: string, speed: number)
+	label.Text = ""
+	for i = 1, #text do
+		label.Text = string.sub(text, 1, i)
+		task.wait(speed / #text)
+	end
+end
+
+local function InitHighlight(local_player: Player, target: Player, max_dist: number, toggleEvent: BindableEvent)
+	local character = target.Character
+
+	local highlight = Instance.new("Highlight")
+	highlight.Parent = character
+	highlight.Enabled = true
+
+	while toggle ~= false do
+		task.wait(0)
+
+		local dist = local_player:DistanceFromCharacter(character:FindFirstChild("HumanoidRootPart").Position)
+		local t = math.clamp(dist / max_dist, 0, 1)
+
+		if dist > max_dist then
+			print(script.Name .. ": max > max_dist, exiting")
+			toggle = false
+			toggleEvent:Fire() -- for some motherfucking reason the :GetPropertyChangedSignal() or :Changed() wouldnt fire so this is my best workaround
+		elseif t <= 0.5 then
+			--print("green to yellow: dist: ".. dist .. " | t: " .. t / 0.5)
+			highlight.FillColor = Color3.new(0, 1, 0):Lerp(Color3.new(1, 1, 0), t / 0.5)
+		else
+			--print("yellow to red: dist: ".. dist .. " | t: " .. t)
+			highlight.FillColor = Color3.new(1, 1, 0):Lerp(Color3.new(1, 0, 0), t)
+		end
+	end
+end
+
+local ClickHandler = {}
+
+function ClickHandler.init(context)
+	local Player: Player = context.player
+	local toggleEvent: BindableEvent = context.toggleEvent
+	local max_dist: number = context.maxDistance
+	
+	local Mouse = Player:GetMouse()
+	
+	-- Set up persistent click listener
+	Mouse.Button1Down:Connect(function()
+		if not Mouse.Target then
+			return
+		end
+		local Part = Mouse.Target
+		
+		if Part:FindFirstAncestorWhichIsA("Model") then
+			Character = Part:FindFirstAncestorWhichIsA("Model")
+		end
+
+		if Character and Players:GetPlayerFromCharacter(Character) then
+			if cd then
+				return
+			end
+
+			toggle = not toggle
+
+			-- scale = k * 1 / length | or simply scale = C / length
+			-- example, 0.9 = C / 24, 21.6 = C
+			-- meaning scale = 21.6 / length
+			-- multiply it by 10^-1 to get the actual scale
+			tween_select = TS:Create(
+				Character.Head:FindFirstChild("Tag").Container.Select,
+				tInfo_select,
+				{
+					Size = UDim2.new(
+						(21.6 / #Character.Head:FindFirstChild("Tag").Container.Primary.Text) * 10 ^ -1,
+						0,
+						0.02,
+						0
+					),
+				}
+			)
+			tween_unselect = TS:Create(
+				Character.Head:FindFirstChild("Tag").Container.Select,
+				tInfo_select,
+				{ Size = UDim2.new(0, 0, 0.02, 0) }
+			)
+
+			local PlayerTargeted = Players:GetPlayerFromCharacter(Character)
+
+			local dist = Player:DistanceFromCharacter(Character:FindFirstChild("HumanoidRootPart").Position)
+			if dist > max_dist then
+				return
+			end
+
+			if previousPlayer == "" then
+				previousPlayer = PlayerTargeted.Name
+			elseif previousPlayer ~= "" and previousPlayer ~= PlayerTargeted.Name then
+				task.spawn(typewrite, Character.Head:FindFirstChild("Tag").Container.Bar.BarEntry, cache[previousPlayer], 0.15)
+				previousPlayer = PlayerTargeted.Name
+			end
+
+			local tag = Character.Head:FindFirstChild("Tag")
+			if not tag then
+				return
+			end
+
+			local bar = tag.Container:WaitForChild("Bar")
+
+			if
+				PlayerTargeted:FindFirstChild("barrank_value")
+				and PlayerTargeted:FindFirstChild("barrank_value").Value ~= ""
+			then
+				if toggle == true then
+					if not cache[PlayerTargeted.Name] then
+						cache[PlayerTargeted.Name] = bar.BarEntry.Text
+					end
+					tween_select:Play()
+					task.spawn(InitHighlight, Player, PlayerTargeted, max_dist, toggleEvent)
+					task.spawn(typewrite, bar.BarEntry, PlayerTargeted.barrank_value.Value, 0.25)
+				else
+					for _, v in pairs(Character:GetChildren()) do
+						if v:IsA("Highlight") then
+							v:Destroy()
+						end
+					end
+					tween_unselect:Play()
+					task.spawn(typewrite, bar.BarEntry, cache[PlayerTargeted.Name], 0.25)
+				end
+			end
+
+			cooldownThing()
+			print("done - toggle: " .. tostring(toggle))
+		end
+	end)
+end
+
+return ClickHandler

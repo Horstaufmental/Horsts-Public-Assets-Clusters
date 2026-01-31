@@ -8,17 +8,20 @@
 
 where i houses most of my assets for free public release that i've made/modified over my time with Roblox Studio
 
-# Installation
+## Installation
 
 > [!IMPORTANT]
 > Unless explicitly told otherwise, there are no way to manually build an asset.
 > The [releases](https://github.com/Horstaufmental/Horsts-Public-Assets-Clusters/releases) serves as the only place to obtain the binaries
 
-each assets will have their own corresponding tags, which can you use to navigate and find your desired target, which can be accessed [here.](https://github.com/Horstaufmental/Horsts-Public-Assets-Clusters/tags)
+> [!NOTE]
+> For developers who want to build from source, use the **LuauExporter** tool (see above).
+
+Each asset will have their own corresponding tags, which can you use to navigate and find your desired target, which can be accessed [here.](https://github.com/Horstaufmental/Horsts-Public-Assets-Clusters/tags)
 
 **NOTE:** Only the binaries for the latest versions will be available, you'll have to download the source file from a specific tag then set them up yourself if you wanted to use a older version.
 
-the source code of each assets are available in `src/ASSETNAME_CHANGEME`
+The source code of each asset is available in `src/ASSETNAME/src/`
 
 # License
 
@@ -37,3 +40,4 @@ You are free to:
 ![Static Badge](https://img.shields.io/badge/Horstaufmental-%235865f2?style=for-the-badge&label=Discord%20Profile&link=https%3A%2F%2Fdiscord.com%2Fusers%2F880022290023215145)
 
 ![Static Badge](https://img.shields.io/badge/Horstaufmental-%23000000?style=for-the-badge&label=Roblox%20Profile&link=https%3A%2F%2Fwww.roblox.com%2Fusers%2F460541970%2Fprofile)
+

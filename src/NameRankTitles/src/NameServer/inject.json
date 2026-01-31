@@ -1,0 +1,13 @@
+{
+  "inject": [
+    {
+      "target": "Tag/Container/Health",
+      "type": "Script",
+      "name": "HealthHandler",
+      "source": "healthHandler.server.luau",
+      "properties": {
+        "Disabled": true
+      }
+    }
+  ]
+}

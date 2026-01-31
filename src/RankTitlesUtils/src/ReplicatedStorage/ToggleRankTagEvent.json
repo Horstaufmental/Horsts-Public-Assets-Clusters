@@ -1,0 +1,23 @@
+{
+  "schema": "RobloxDom",
+  "version": 1,
+  "metadata": {
+    "ExplicitAutoJoints": "true"
+  },
+  "root": {
+    "className": "XmlRobloxFile",
+    "name": "Xml:",
+    "referent": "null",
+    "children": [
+      {
+        "className": "RemoteEvent",
+        "name": "ToggleRankTagEvent",
+        "referent": "RBX5E746BA3C3464B44AC3112F389B3E0DF",
+        "properties": {
+          "Name": "ToggleRankTagEvent"
+        },
+        "children": []
+      }
+    ]
+  }
+}

@@ -19,6 +19,8 @@ local Config = {}
 	https://trello.com/b/HERE/
 ]]
 
+Config.enableTrello = false
+
 Config.board = ""
 Config.key = ""
 Config.token = ""
@@ -48,7 +50,7 @@ Config.divisions = {
 			255, -- maxRank
 			2, -- priority
 		},
-		
+
 		["The Knightly Order"] = { -- Division Name
 			0, -- groupID
 			"rbxassetid://14842204514", -- divisionIcon
@@ -72,7 +74,5 @@ Config.customRanks = {
 		{"110-160", "Officers", nil}
 	}
 }
-
-Config.VERSION = "DEVELOPMENT-MAIN"
 
 return Config

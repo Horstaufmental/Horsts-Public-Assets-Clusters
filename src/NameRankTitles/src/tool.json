@@ -1,0 +1,7 @@
+{
+    "name": "NameRankTitles",
+    "version": "1.4.0",
+    "author": "Horstaufmental",
+    "entry": "init.luau",
+    "rootType": "Model"
+}

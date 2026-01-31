@@ -1,2 +1,9 @@
 .vscode/
 ascii_frames/
+obj/
+bin/
+
+# Binaries files 
+# (represents the final built asset, unlike XML files which are used for building)
+*.rbxm
+*.rbxl

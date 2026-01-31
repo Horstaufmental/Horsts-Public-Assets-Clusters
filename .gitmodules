@@ -1,0 +1,3 @@
+[submodule "extern/RobloxFileFormat"]
+	path = extern/RobloxFileFormat
+	url = https://github.com/Horstaufmental/Roblox-File-Format.git

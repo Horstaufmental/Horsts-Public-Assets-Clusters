@@ -22,19 +22,77 @@ A customizable overhead name tag system for Roblox with Trello integration, divi
 
 ## Installation
 
+⚠️ **CRITICAL: Understanding Roblox Execution Model**
+
+Roblox executes scripts based on **Script type + container placement**, NOT folder names or file structure. The `init.lua` naming convention does NOT trigger automatic execution.
+
+### Manual Installation Steps
+
 1. Download the latest release from [GitHub Releases](https://github.com/Horstaufmental/Horsts-Public-Assets-Clusters/releases)
-2. Install the following components:
-   - Place `NameRankTitles/ServerScriptService/NameServer` script in `ServerScriptService/`
-   - Place `NameRankTitles/StarterPlayerScripts/NameClientClickHandler` in `StarterPlayer/StarterPlayerScripts/`
-3. Configure your settings in `Config` under `NameServer` (see Configuration section below)
+
+2. **Install Server-Side Components** (auto-executes):
+   - Place `NameServer` **[Script]** into `ServerScriptService`
+   - This Script must contain the following children:
+     - `config` (ModuleScript)
+     - `trello` (ModuleScript)
+     - `overhead` (ModuleScript)
+     - `divisions` (ModuleScript)
+     - `Tag` (BillboardGui with nested components)
+
+3. **Install Client-Side Components** (auto-executes):
+   - Place `NameClient` **[LocalScript]** into `StarterPlayer/StarterPlayerScripts`
+   - This LocalScript must contain:
+     - `clickHandler` (ModuleScript)
+
+4. **Install Shared Module**:
+   - Place `NameRankTitles` **[ModuleScript]** into `ReplicatedStorage`
+   - This provides version info and shared constants
+
+5. **Configure Settings**:
+   - Edit `config` ModuleScript under `NameServer` (see Configuration section below)
+
+6. **Publish and Test**:
+   - Enable "Allow HTTP Requests" in Game Settings
+
+### Runtime Structure
+
+After installation, your game should look like this:
+
+```
+ServerScriptService
+└── NameServer [Script] <- Auto-executes on server
+    ├── config [ModuleScript]
+    ├── trello [ModuleScript]
+    ├── overhead [ModuleScript]
+    ├── divisions [ModuleScript]
+    └── Tag [BillboardGui]
+
+StarterPlayer
+└── StarterPlayerScripts
+    └── NameClient [LocalScript] <- Auto-executes for each player
+        └── clickHandler [ModuleScript]
+
+ReplicatedStorage (optional)
+└── NameRankTitles [ModuleScript] <- Does NOT execute, only provides metadata
+```
+
+### Important Notes
+
+- ❌ **Folder names do NOT trigger execution** - only Script/LocalScript placement matters
+- ❌ **Do NOT place Scripts in ReplicatedStorage** - they will not execute
+- ❌ **Do NOT rely on `init.lua` naming** - it's just a convention, not a Roblox feature
+- ✅ **Scripts execute based on their container** (ServerScriptService, StarterPlayerScripts, etc.)
+- ✅ **ModuleScripts only run when explicitly `require()`d**
 
 ## Configuration
 
 ### Trello Setup
 
-Edit `Config.luau` to add your Trello credentials:
+Edit the `config` ModuleScript (child of `NameServer`) to add your Trello credentials:
 
 ```lua
+Config.enableTrello = false -- By default is set to false to prevent HTTP 429 error from empty URL.
+
 Config.board = ""     -- Your Trello board ID (from URL: trello.com/b/HERE/)
 Config.key = ""       -- Your API key from https://trello.com/power-ups/admin/
 Config.token = ""     -- Your API token (32 characters)
@@ -96,7 +154,7 @@ Config.customRanks = {
 
 ### Division Configuration
 
-Configure divisions in `Config.luau`:
+Configure divisions in the `config` ModuleScript:
 
 ```lua
 Config.divisions = {
@@ -248,7 +306,6 @@ Players can click on other players to:
 
 ## Important Notes
 
-- **Studio Testing**: `PlayerAdded` events may not fire in Studio solo mode. Use **"Clients and Servers"** mode or test in-game
 - **Trello Cache**: The system updates Trello data every 30 seconds to minimize API calls
 - **Character Health**: Health bars are designed for characters with ≤100 max health
 - **Name Distance**: The system sets `NameDisplayDistance` and `HealthDisplayDistance` to 0 (tags replace default nameplates)
@@ -256,13 +313,13 @@ Players can click on other players to:
 ## Troubleshooting
 
 ### Tags not appearing
-- Check that `Tag` is properly placed under `NameServer`
+- Check that `Tag` (BillboardGui) is properly placed as a child of `NameServer`
 - Verify character Head exists before tag creation
-- Test in "Clients and Servers" mode, not solo Studio mode
+- Ensure `NameServer` is placed in ServerScriptService (not ReplicatedStorage)
 
 ### Trello titles not loading
 - Ensure that `Allow HTTP Requests` is turned on in the game settings
-- Verify your API key, token, and board ID in Config.luau
+- Verify your API key, token, and board ID in the `config` ModuleScript
 - Check that your list name matches exactly (case-sensitive)
 - Ensure Trello cards are formatted correctly (7 lines in description)
 - Check output for HTTP errors
@@ -271,7 +328,7 @@ Players can click on other players to:
 - Verify the player is in the specified group
 - Check that rank is within minRank and maxRank range
 - Ensure Team has a `groupID` IntValue child
-- Verify team name matches exactly in Config.divisions
+- Verify team name matches exactly in `config.divisions`
 
 ### Group roles not working
 - Ensure Teams have `groupID` IntValue children
@@ -287,7 +344,7 @@ Players can click on other players to:
 
 This asset is licensed under the **MPL-2.0** (Mozilla Public License Version 2.0).
 
-**Special Exception**: `Config.luau` has an exception - modifications to this file do not create any obligation to publish the modified version.
+**Special Exception**: The `config` ModuleScript has an exception - modifications to this file do not create any obligation to publish the modified version.
 
 See [LICENSE](/LICENSE) for full details.
 
@@ -295,3 +352,5 @@ See [LICENSE](/LICENSE) for full details.
 
 Originally made by **K_ieraH** and **Nucl3arPlayz**  
 Modified by **Horstaufmental**
+
+Special thanks to **Krcnos** for the Tag UI from his [Game Demo](https://www.roblox.com/games/6114334242/Game-Demo)
