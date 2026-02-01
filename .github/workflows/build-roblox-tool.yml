@@ -1,0 +1,63 @@
+name: Build Roblox Tool
+
+on:
+  workflow_dispatch:
+    inputs:
+      tool_source_directory:
+        description: 'Path to the tool source directory (relative to repo root)'
+        required: true
+        type: string
+      tool_name:
+        description: 'Name of the tool (used for output filename)'
+        required: true
+        type: string
+      version_tag:
+        description: 'Version tag for the release (e.g., v1.0.0)'
+        required: true
+        type: string
+      prerelease:
+        description: 'Mark as prerelease?'
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Setup .NET SDK 10
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Build LuauExporter
+        run: dotnet build tools/LuauExporter/LuauExporter.csproj -c Release
+
+      - name: Build RBXM file
+        run: |
+          mkdir -p build
+          dotnet run \
+            --project tools/LuauExporter/LuauExporter.csproj \
+            -c Release \
+            -- \
+            --tooldir "${{ github.event.inputs.tool_source_directory }}" \
+            --out "build/${{ github.event.inputs.tool_name }}.rbxm"
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: "${{ github.event.inputs.version_tag }}"
+          name: "${{ github.event.inputs.tool_name }} ${{ github.event.inputs.version_tag }}"
+          prerelease: ${{ github.event.inputs.prerelease }}
+          files: |
+            build/${{ github.event.inputs.tool_name }}.rbxm
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
