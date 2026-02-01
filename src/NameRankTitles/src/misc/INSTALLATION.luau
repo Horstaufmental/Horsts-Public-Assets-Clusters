@@ -1,97 +1,317 @@
 --[[
 	Copyright (c) 2025 Horstaufmental
-    SPDX-License-Identifier: MPL-2.0
-    
-    # INSTALLATION GUIDE: NameRankTitles
-    This plugin is to be used alongside RankTitlesUtils for admin controls
-    
-    Step 1:
-    Move the scripts/models into each corresponding place (e.g. a script inside "ServerScriptService" folder would need be moved to ServerScriptService)
-    For the case of "Plugins", move the scripts inside into your Adonis_Loader.Config.Plugins folder
-    
-    Step 2:
-    Configure the "adminPerms" inside script as needed (See Configuration for more information)
-    
-    Done. That's all you needed.
-    
-    ------------------------------------------
-    Commands
-    ------------------------------------------
-
-	| Prefix | Command | Arguments | Description | Admin Level |
-	|--------|---------|-----------|-------------|-------------|
-	| : | `hidename`, `toggletag`, `hidetag` 		| `player`							  		 | Hide player's nametag (globally					 | Admins |
-	| : | `nameedit`, `newname` 					| `player`, `new name` 				 		 | Edit player's name in the 						 | Admins |
-	| : | `rankedit`, `newrank`, `ranktag` 			| `player`, `new rank` 				  		 | Edit player's rank in the ranktag  				 | Admins |
-	| : | `namecoloredit`, `namecolor` 				| `player`, `new name color (in RGB)` 		 | Edit player's name color in the ranktag  		 | Admins |
-	| : | `hidebar`, `togglebar`, `hidedivision` 	| `player` 							  		 | Hide player's divisional bar (globally)			 | Admins |
-	| : | `baredit`, `newbardiv`, `divbar` 			| `player`, `new rank` 				  		 | Edit player's divisional bar title 				 | Admins |
-	| : | `barrankedit`, `newbarrank`, `rankbar` 	| `player`, `new rank` 				  		 | Edit player's divisional bar rank 				 | Admins |
-	| : | `iconedit`, `newbaricon`, `iconbar` 		| `player`, `new icon (must be an asset id)` | Edit player's divisional bar icon 				 | Admins |
-	| : | `barcoloredit`, `barcolor` 				| `player`, `new bar color (in RGB)` 		 | Edit player's divisional bar color in the ranktag | Admins |
-	| ! | `showtag`, `showtagall`, `toggletagall`   | *(none)* 									 | Hide everyone's nametag (locally) 				 | Players|
+	SPDX-License-Identifier: MPL-2.0
 	
-	------------------------------------------
-	Usage Examples
-	------------------------------------------
-	
-	-- Hide a player's tag
-	:hidename Player1
+	# NameRankTitles - Installation Guide
 
-	-- Change someone's displayed name
-	:nameedit Player1 [VIP] CustomName
+	## Understanding Roblox Script Execution
 
-	-- Update rank display
-	:rankedit Player1 Supreme Commander
+	>[!WARNING]
+	>Read this before installing!
 
-	-- Change name color to red
-	:namecolor Player1 255, 0, 0
+	### How Roblox Executes Scripts
 
-	-- Toggle divisional bar visibility
-	:hidebar Player1
+	Roblox executes scripts based on **two factors only**:
 
-	-- Update division bar text
-	:baredit Player1 Elite Division
+	1. **Script Type** (Script, LocalScript, or ModuleScript)
+	2. **Container Placement** (which service the script is placed in)
 
-	-- Change bar icon (using asset ID)
-	:iconedit Player1 123456789
+	### What Does NOT Trigger Execution
 
-	-- Change bar color to blue
-	:barcolor Player1 0, 0, 255
+	**Folder names** - Naming a folder `server` or `client` does nothing  
+	**File names** - Naming a file `init` does not make it auto-execute  
+	**Folder structure** - Nested folders do not affect execution  
+	**ModuleScript placement** - `ModuleScripts` never auto-execute, regardless of location
 
-	-- Player command: toggle all tags visibility (local only)
-	!showtag
-	
-	------------------------------------------
-	Configuration
-	------------------------------------------
+	### What DOES Trigger Execution
 
-	The default admin level for commands is set to "Admins". To change this:
+	**Script in ServerScriptService** - Auto-executes on server startup  
+	**LocalScript in StarterPlayerScripts** - Auto-executes for each player  
+	**LocalScript in StarterCharacterScripts** - Auto-executes when character spawns  
+	**Script/LocalScript in workspace** - Auto-executes (but not recommended)
 
-	1. Open "Server: RankTitlesUtils"
-	2. Modify the `adminPerms` variable at line 15:
-	   "local adminPerms = "YourCustomRank""
-	3. Use rank names from your Adonis Settings or custom ranks
-	
-	------------------------------------------
-	Notes
-	------------------------------------------
+	### ModuleScripts
 
-	- RGB Format: Colors must be specified as `R, G, B` (e.g., `255, 0, 0` for red)
-	- Asset IDs: For icon commands, provide only the numeric asset ID without the `rbxassetid://` prefix
-	- Player Targeting: Commands support Adonis player selectors:
-	  - `me` - Target yourself
-	  - `all` - Target all players
-	  - `others` - Target everyone except yourself
-	  - `%TEAMNAME` - Target specific team
-	  > (For more information, please read the manual by running `!usage` in game with Adonis)
-	- Global vs Local: 
-	  - Admin commands (`:`) affect all players globally
-	  - Player commands (`!`) only affect the command user locally
-    
-    ------------------------------------------
-    
-    Reporting bugs or having any questions?
-    You can open a new issue in my repository:
-    https://github.com/Horstaufmental/Horsts-Public-Assets-Clusters
+	ModuleScripts **never auto-execute**. They only run when explicitly `require()`d by another script.
+
+	```lua
+	-- This ModuleScript will NOT run automatically
+	local MyModule = {}
+
+	print("This only prints when required!")
+
+	return MyModule
+	```
+
+	---
+
+	## Installation Steps
+
+	### Step 1: Download the Asset
+
+	Download the latest release from [GitHub Releases](https://github.com/Horstaufmental/Horsts-Public-Assets-Clusters/releases)
+
+	### Step 2: Install Server Components
+
+	1. Open Roblox Studio
+	2. Navigate to **ServerScriptService** in the Explorer
+	3. Insert `NameServer` as a **Script** (not a ModuleScript!)
+	4. Verify it contains these children:
+	   - `config` (ModuleScript)
+	   - `trello` (ModuleScript)
+	   - `overhead` (ModuleScript)
+	   - `divisions` (ModuleScript)
+	   - `Tag` (BillboardGui with nested components)
+
+	**Expected Structure:**
+	```
+	ServerScriptService
+	└── NameServer [Script] <- Must be a Script, not ModuleScript
+	    ├── config [ModuleScript]
+	    ├── trello [ModuleScript]
+	    ├── overhead [ModuleScript]
+	    ├── divisions [ModuleScript]
+	    └── Tag [BillboardGui]
+	        └── Container [Frame]
+	            ├── Primary [TextLabel]
+	            ├── Secondary [TextLabel]
+	            ├── Bar [Frame]
+	            ├── Rank [ImageLabel]
+	            ├── Select [Frame]
+	            └── Health [Frame]
+	                └── HealthHandler [Script]
+	```
+
+	### Step 3: Install Client Components
+
+	1. Navigate to **StarterPlayer → StarterPlayerScripts** in the Explorer
+	2. Insert `NameClient` as a **LocalScript** (not a ModuleScript!)
+	3. Verify it contains:
+	   - `clickHandler` (ModuleScript)
+
+	**Expected Structure:**
+	```
+	StarterPlayer
+	└── StarterPlayerScripts
+	    └── NameClient [LocalScript] <- Must be a LocalScript
+	        └── clickHandler [ModuleScript]
+	```
+
+	### Step 4: Install Shared Module
+
+	Used for shared constants:
+
+	1. Navigate to **ReplicatedStorage** in the Explorer
+	2. Insert `NameRankTitles` as a **ModuleScript**
+	3. This module provides metadata only and does NOT execute
+
+	**Expected Structure:**
+	```
+	ReplicatedStorage
+	└── NameRankTitles [ModuleScript] <- Used for shared constants
+	```
+
+	### Step 5: Create ToggleEvent
+
+	The client script requires a BindableEvent for communication:
+
+	1. Navigate to **ReplicatedStorage** in the Explorer
+	2. Create a new **BindableEvent**
+	3. Name it exactly `ToggleEvent`
+
+	**Expected Structure:**
+	```
+	ReplicatedStorage
+	├── ToggleEvent [BindableEvent] <- Required for client functionality
+	└── NameRankTitles [ModuleScript] (optional)
+	```
+
+	### Step 6: Configure Settings
+
+	1. In ServerScriptService, expand `NameServer`
+	2. Open the `config` ModuleScript
+	3. Edit the configuration values:
+
+	```lua
+	-- Trello API credentials
+	Config.board = "YOUR_BOARD_ID"
+	Config.key = "YOUR_API_KEY"
+	Config.token = "YOUR_API_TOKEN"
+	Config.listName = "Titles"
+
+	-- Division configuration
+	Config.divisions = {
+	    ["Team Name"] = {
+	        ["Division Name"] = {
+	            groupID,
+	            divisionIcon,
+	            rgb,
+	            minRank,
+	            maxRank,
+	            priority,
+	        },
+	    }
+	}
+
+	-- Custom rank names
+	Config.customRanks = {
+	    [groupId] = {
+	        {"RankId", "CustomRankName", "CustomRankIcon"},
+	    }
+	}
+	```
+
+	See the main [README.md](README.md) for detailed configuration instructions.
+
+	### Step 7: Enable HTTP Requests
+
+	1. Go to **Home -> Experience Settings**
+	2. Navigate to **Security** tab
+	3. Enable **"Allow HTTP Requests"**
+	4. Click **Save**
+
+	---
+
+	## Common Installation Mistakes
+
+	### ❌ Mistake 1: Wrong Script Type
+
+	**Problem:** Placing `NameServer` as a ModuleScript instead of a Script
+
+	**Symptom:** Nothing happens, no tags appear
+
+	**Solution:** Ensure it's a **Script** (white icon), not a ModuleScript (purple icon with white jigsaw piece)
+
+	### ❌ Mistake 2: Wrong Container
+
+	**Problem:** Placing scripts in ReplicatedStorage or ServerStorage
+
+	**Symptom:** Scripts don't execute
+
+	**Solution:** 
+	- Server scripts → **ServerScriptService**
+	- Client scripts → **StarterPlayerScripts**
+
+	### ❌ Mistake 3: Missing Children
+
+	**Problem:** Script doesn't have required ModuleScript children
+
+	**Symptom:** Error: "Key 'config' not found in class 'LuaSourceContainer'"
+
+	**Solution:** Ensure all ModuleScripts are direct children of the main Script
+
+	### ❌ Mistake 4: HTTP Error 429
+
+	**Problem:** Empty Trello fields in configuration
+
+	**Symptom:** Trello logic breaks, causing the main script to also break
+
+	**Solution:** Fill in the fields or disable Trello usage
+
+	### ❌ Mistake 5: Missing ToggleEvent
+
+	**Problem:** No BindableEvent named "ToggleEvent" in ReplicatedStorage
+
+	**Symptom:** Client script errors or click functionality doesn't work
+
+	**Solution:** Create a BindableEvent in ReplicatedStorage named exactly "ToggleEvent"
+
+	---
+
+	## Verification Checklist
+
+	Before publishing your game, verify:
+
+	- [ ] `NameServer` is a **Script** in **ServerScriptService**
+	- [ ] `NameClient` is a **LocalScript** in **StarterPlayerScripts**
+	- [ ] `ToggleEvent` is a **BindableEvent** in **ReplicatedStorage**
+	- [ ] All ModuleScripts are children of their respective Scripts
+	- [ ] `Tag` BillboardGui is a child of `NameServer`
+	- [ ] HTTP Requests are enabled in Game Settings
+	- [ ] Configuration values are set in `config` ModuleScript
+	- [ ] Teams have `groupID` IntValue children (if using group integration)
+	- [ ] Tested in "Clients and Servers" mode
+
+	---
+
+	## File Structure Reference
+
+	### Source Structure (Development)
+
+	This is how the asset is organized in source control:
+
+	```
+	NameRankTitles/
+	├── init.luau                -- Root ModuleScript (metadata only)
+	├── server/
+	│   ├── init.luau            -- Server entry point
+	│   ├── config.luau          -- Configuration
+	│   ├── divisions.luau       -- Division logic
+	│   ├── overhead.luau        -- Overhead tag logic
+	│   ├── trello.luau          -- Trello API integration
+	│   └── Tag.rbxmx            -- BillboardGui template
+	└── client/
+	    ├── init.luau            -- Client entry point
+	    └── clickHandler/
+	        └── init.luau        -- Click interaction logic
+	```
+
+	### Runtime Structure (In Roblox)
+
+	This is how the asset must be placed in your game:
+
+	```
+	ServerScriptService
+	└── NameServer [Script]
+	    ├── config [ModuleScript]
+	    ├── trello [ModuleScript]
+	    ├── overhead [ModuleScript]
+	    ├── divisions [ModuleScript]
+	    └── Tag [BillboardGui]
+
+	StarterPlayer
+	└── StarterPlayerScripts
+	    └── NameClient [LocalScript]
+	        └── clickHandler [ModuleScript]
+
+	ReplicatedStorage
+	├── ToggleEvent [BindableEvent]
+	└── NameRankTitles [ModuleScript] (optional)
+	```
+
+	---
+
+	## Advanced: Understanding the Build Process
+
+	If you're building from source, the build tool must:
+
+	1. **Convert `server/init.luau` to a Script** (not ModuleScript)
+	2. **Convert `client/init.luau` to a LocalScript** (not ModuleScript)
+	3. **Keep all other `.luau` files as ModuleScripts**
+	4. **Inject `Tag.rbxmx` as a child of the server Script**
+	5. **Preserve the hierarchy of all nested Instances**
+
+	The `init.luau` naming is a **development convention only** - it has no special meaning to Roblox.
+
+	---
+
+	## Need Help?
+
+	If you encounter issues:
+
+	1. Check the [Troubleshooting section](README.md#troubleshooting) in the main README
+	2. Verify your installation against this guide
+	3. Test in "Clients and Servers" mode
+	4. Check the Output window for error messages
+	5. Open an issue on [GitHub](https://github.com/Horstaufmental/Horsts-Public-Assets-Clusters/issues)
+
+	---
+
+	## License
+
+	This asset is licensed under the **MPL-2.0** (Mozilla Public License Version 2.0).
+
+	**Special Exception**: The `config` ModuleScript has an exception - modifications to this file do not create any obligation to publish the modified version.
+
+	See [LICENSE](/LICENSE) for full details.
 ]]--
