@@ -20,6 +20,11 @@ on:
         required: false
         type: boolean
         default: false
+      draft:
+        description: 'Create as draft release?'
+        required: false
+        type: boolean
+        default: true
 
 jobs:
   build:
@@ -54,9 +59,10 @@ jobs:
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: "${{ github.event.inputs.version_tag }}"
+          tag_name: "${{ github.event.inputs.tool_name }}-${{ github.event.inputs.version_tag }}"
           name: "${{ github.event.inputs.tool_name }} ${{ github.event.inputs.version_tag }}"
           prerelease: ${{ github.event.inputs.prerelease }}
+          draft: ${{ github.event.inputs.draft }}
           files: |
             build/${{ github.event.inputs.tool_name }}.rbxm
         env:
