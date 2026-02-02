@@ -4,23 +4,35 @@ This file provides guidance to WARP (warp.dev) when working with code in this re
 
 ## Repository Overview
 
-This repository houses Roblox Studio assets for public release. Each asset is independently versioned and released through GitHub tags and releases. Source code is provided, but **binaries are not manually buildable** - they must be obtained from the [releases page](https://github.com/Horstaufmental/Horsts-Public-Assets-Clusters/releases).
+This repository houses multiple assets for public release (primarily Roblox Studio assets plus additional utilities). Each asset is independently versioned and released through GitHub tags and releases.
+
+Binaries for Roblox tools **can now be built from source** using the `tools/LuauExporter` CLI (see `README.md` → “Build from Source”), but prebuilt binaries for the latest versions are still published on the [releases page](https://github.com/Horstaufmental/Horsts-Public-Assets-Clusters/releases) and remain the source of truth for distribution.
 
 ## Project Structure
 
 ```
 src/
   └── ASSETNAME/           # Each asset has its own directory
-      ├── README.md        # Asset documentation
+      ├── README.md        # Asset documentation / installation guide
       └── src/
           ├── Plugins/              # Adonis plugin modules (if applicable)
           ├── ServerScriptService/  # Server-side scripts
           ├── StarterPlayer/        # Client-side scripts
           └── ReplicatedStorage/    # Shared resources (RemoteEvents, etc.)
-misc/                      # Repository assets (images, etc.)
+misc/                      # Repository assets (images, logos, etc.)
+extern/                    # Git submodules and external deps (e.g. RobloxFileFormat)
+tools/                     # C#/.NET CLI tools (LuauExporter, converters, model utilities)+-- LuauExporter/          # Main build tool for Roblox assets+-- FileExaminer/          # Roblox DOM inspector / debugger+-- JSONDOM2XML, XMLDOM2JSON, RobloxModelToFilesystem
 ```
 
 ## Current Assets
+
+### HolyC Apple
+TempleOS/retrocomputing asset: an ASCII frame player for the Touhou track “Bad Apple!!”, designed to run inside TempleOS.
+
+**Key Points:**
+- Distributed primarily as a TempleOS-ready ISO, plus manual install scripts
+- Not a Roblox asset; lives in `src/HolyCApple/`
+- Installation & usage documented in `src/HolyCApple/README.md`
 
 ### NameRankTitles
 A Roblox overhead name tag system with:
