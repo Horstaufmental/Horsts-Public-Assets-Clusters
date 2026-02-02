@@ -11,7 +11,6 @@ return function(Vargs)
 		List of admin levels can be found in your Adonis's Settings
 	]]--
 	local adminPerms = "Admins"
-	local hiddenState = {}
 
 	server.Commands.HideTag = {
 		Prefix = server.Settings.Prefix;	-- Prefix to use for command
@@ -24,11 +23,7 @@ return function(Vargs)
 		Function = function(plr: Player, args: {string})
 			for _, v:Player in service.GetPlayers(plr, args[1], { NoFakePlayer = true }) do
 				local tag = v.Character.Head:WaitForChild("Tag")
-				if hiddenState[v.Name] == nil then
-					hiddenState[v.Name] = true
-				end
-				hiddenState[v.Name] = not hiddenState[v.Name]
-				tag.Enabled = hiddenState[v.Name] or false
+				tag.Enabled = not tag.Enabled
 			end
 		end
 	}
