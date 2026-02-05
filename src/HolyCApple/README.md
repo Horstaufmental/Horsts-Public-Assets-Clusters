@@ -150,9 +150,9 @@ Then replace the current `ascii_frames` folder with your new ones.
 ```bash
     sudo mv ascii_frames/ /mnt/qcow2_mount/Home/BadApple/ascii_frames
 ```
-If your extracted video are not 30fps, make sure to set your FPS inside `badapple.HC`
+If your extracted video is not 30fps, make sure to set your FPS inside `badapple.HC`
 ```c
-    PlayASCIIFrames(30); -- change to your desired FPS
+    PlayASCIIFrames(30); // change to your desired FPS
 ```
 
 ## I don't want an ASCII player, are there other methods?
