@@ -1,0 +1,23 @@
+{
+  "schema": "RobloxDom",
+  "version": 1,
+  "metadata": {
+    "ExplicitAutoJoints": "true"
+  },
+  "root": {
+    "className": "XmlRobloxFile",
+    "name": "Xml:",
+    "referent": "null",
+    "children": [
+      {
+        "className": "RemoteEvent",
+        "name": "checkEligibilityEvent",
+        "referent": "RBXD1AA2AD3837C4C5593DA04A241C6F2F5",
+        "properties": {
+          "Name": "checkEligibilityEvent"
+        },
+        "children": []
+      }
+    ]
+  }
+}

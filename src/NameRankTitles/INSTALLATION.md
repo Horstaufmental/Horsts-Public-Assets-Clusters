@@ -53,6 +53,8 @@ Download the latest release from [GitHub Releases](https://github.com/Horstaufme
 2. Navigate to **ServerScriptService** in the Explorer
 3. Insert `NameServer` as a **Script** (not a ModuleScript!)
 4. Verify it contains these children:
+   - `logic` (ModuleScript)
+     - `logicHelpers` (ModuleScript)
    - `config` (ModuleScript)
    - `trello` (ModuleScript)
    - `overhead` (ModuleScript)
@@ -63,6 +65,8 @@ Download the latest release from [GitHub Releases](https://github.com/Horstaufme
 ```
 ServerScriptService
 └── NameServer [Script] <- Must be a Script, not ModuleScript
+    ├── logic [ModuleScript]
+    │   └── logicHelpers [ModuleScript]
     ├── config [ModuleScript]
     ├── trello [ModuleScript]
     ├── overhead [ModuleScript]
@@ -90,7 +94,10 @@ ServerScriptService
 StarterPlayer
 └── StarterPlayerScripts
     └── NameClient [LocalScript] <- Must be a LocalScript
-        └── clickHandler [ModuleScript]
+        ├── clickHandler [ModuleScript]
+        ├── ageEligibilityHandler [ModuleScript]
+        ├── ToggleEvent [BindableEvent]
+        └── checkEligibilityEvent [RemoteEvent]
 ```
 
 ### Step 4: Install Shared Module
@@ -107,22 +114,38 @@ ReplicatedStorage
 └── NameRankTitles [ModuleScript] <- Used for shared constants
 ```
 
-### Step 5: Create ToggleEvent
+### Step 5: Install Events
 
-The client script requires a BindableEvent for communication:
+The client script requires a BindableEvent and ToggleEvent for communication:
 
-1. Navigate to **ReplicatedStorage** in the Explorer
-2. Create a new **BindableEvent**
-3. Name it exactly `ToggleEvent`
+Move `ToggleEvent` and `checkEligibilityEvent` from `NameClient`
+to **ReplicatedStorage**
 
 **Expected Structure:**
 ```
 ReplicatedStorage
-├── ToggleEvent [BindableEvent] <- Required for client functionality
-└── NameRankTitles [ModuleScript] (optional)
+├── ToggleEvent [BindableEvent]
+├── checkEligibilityEvent [RemoteEvent]
+└── NameRankTitles [ModuleScript]
 ```
 
 ### Step 6: Configure Settings
+
+#### Constants
+
+1. In ReplicatedStorage, open `NameRankTitles`
+2. Edit the configuration values:
+
+```lua
+-- Shared constants
+NameRankTitles.Constants = {
+	DefaultMaxDistance = 15,
+	EnableCanChatIcon = true,
+	EnableTrello = false,
+}
+```
+
+#### Titles
 
 1. In ServerScriptService, expand `NameServer`
 2. Open the `config` ModuleScript
@@ -218,15 +241,17 @@ See the main [README.md](README.md) for detailed configuration instructions.
 
 Before publishing your game, verify:
 
+- [ ] `NameRankTitles` is a **ModuleScript** in **ReplicatedStorage**
 - [ ] `NameServer` is a **Script** in **ServerScriptService**
 - [ ] `NameClient` is a **LocalScript** in **StarterPlayerScripts**
 - [ ] `ToggleEvent` is a **BindableEvent** in **ReplicatedStorage**
+- [ ] `checkEligibilityEvent` is a **RemoteEvent** in **ReplicatedStorage**
 - [ ] All ModuleScripts are children of their respective Scripts
 - [ ] `Tag` BillboardGui is a child of `NameServer`
 - [ ] HTTP Requests are enabled in Game Settings
+- [ ] Configuration values are set in `NameRankTitles` ModuleScript
 - [ ] Configuration values are set in `config` ModuleScript
 - [ ] Teams have `groupID` IntValue children (if using group integration)
-- [ ] Tested in "Clients and Servers" mode
 
 ---
 
@@ -240,16 +265,21 @@ This is how the asset is organized in source control:
 NameRankTitles/
 ├── init.luau                -- Root ModuleScript (metadata only)
 ├── server/
-│   ├── init.luau            -- Server entry point
+│   ├── logic/
+│   │   ├── init.luau        -- Main server logic
+│   │   └── logicHelpers.luau -- Helper functions for logic
+│   ├── init.server.luau     -- Server entry point
 │   ├── config.luau          -- Configuration
 │   ├── divisions.luau       -- Division logic
 │   ├── overhead.luau        -- Overhead tag logic
 │   ├── trello.luau          -- Trello API integration
 │   └── Tag.rbxmx            -- BillboardGui template
 └── client/
-    ├── init.luau            -- Client entry point
-    └── clickHandler/
-        └── init.luau        -- Click interaction logic
+    ├── init.client.luau     -- Client entry point
+    ├── clickHandler.luau    -- Click interaction logic
+    ├── ageEligibilityHandler.luau -- Chat eligibility logic
+    ├── ToggleEvent.json     -- 'ToggleEvent' BindableEvent
+    └── checkEligibilityEvent.json -- 'checkEligibilityEvent' RemoteEvent
 ```
 
 ### Runtime Structure (In Roblox)
@@ -259,6 +289,8 @@ This is how the asset must be placed in your game:
 ```
 ServerScriptService
 └── NameServer [Script]
+    ├── logic [ModuleScript]
+    │   └── logicHelpers [ModuleScript]
     ├── config [ModuleScript]
     ├── trello [ModuleScript]
     ├── overhead [ModuleScript]
@@ -268,10 +300,12 @@ ServerScriptService
 StarterPlayer
 └── StarterPlayerScripts
     └── NameClient [LocalScript]
-        └── clickHandler [ModuleScript]
+        ├── clickHandler [ModuleScript]
+        └── ageEligibilityHandler [ModuleScript]
 
 ReplicatedStorage
 ├── ToggleEvent [BindableEvent]
+├── checkEligibilityEvent [RemoteEvent]
 └── NameRankTitles [ModuleScript] (optional)
 ```
 
@@ -281,8 +315,8 @@ ReplicatedStorage
 
 If you're building from source, the build tool must:
 
-1. **Convert `server/init.luau` to a Script** (not ModuleScript)
-2. **Convert `client/init.luau` to a LocalScript** (not ModuleScript)
+1. **Convert `server/init.server.luau` to a Script** (not ModuleScript)
+2. **Convert `client/init.client.luau` to a LocalScript** (not ModuleScript)
 3. **Keep all other `.luau` files as ModuleScripts**
 4. **Inject `Tag.rbxmx` as a child of the server Script**
 5. **Preserve the hierarchy of all nested Instances**

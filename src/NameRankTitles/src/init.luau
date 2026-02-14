@@ -16,13 +16,15 @@
 local NameRankTitles = {}
 
 -- Version information
-NameRankTitles.Version = "1.4.0"
+NameRankTitles.Version = "1.5.0-rc1"
 NameRankTitles.Author = "Horstaufmental"
 NameRankTitles.License = "MPL-2.0"
 
 -- Shared constants
 NameRankTitles.Constants = {
-    DefaultMaxDistance = 15,
+	DefaultMaxDistance = 15,
+	EnableCanChatIcon = true,
+	EnableTrello = false,
 }
 
 return NameRankTitles

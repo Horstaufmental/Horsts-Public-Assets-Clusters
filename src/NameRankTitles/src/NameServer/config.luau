@@ -19,7 +19,9 @@ local Config = {}
 	https://trello.com/b/HERE/
 ]]
 
-Config.enableTrello = false
+Config.enableTrello = 
+	require(game.ReplicatedStorage:WaitForChild("NameRankTitles")).Constants.EnableTrello
+	or false
 
 Config.board = ""
 Config.key = ""

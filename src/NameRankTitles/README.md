@@ -22,77 +22,26 @@ A customizable overhead name tag system for Roblox with Trello integration, divi
 
 ## Installation
 
-⚠️ **CRITICAL: Understanding Roblox Execution Model**
-
-Roblox executes scripts based on **Script type + container placement**, NOT folder names or file structure. The `init.lua` naming convention does NOT trigger automatic execution.
-
-### Manual Installation Steps
-
-1. Download the latest release from [GitHub Releases](https://github.com/Horstaufmental/Horsts-Public-Assets-Clusters/releases)
-
-2. **Install Server-Side Components** (auto-executes):
-   - Place `NameServer` **[Script]** into `ServerScriptService`
-   - This Script must contain the following children:
-     - `config` (ModuleScript)
-     - `trello` (ModuleScript)
-     - `overhead` (ModuleScript)
-     - `divisions` (ModuleScript)
-     - `Tag` (BillboardGui with nested components)
-
-3. **Install Client-Side Components** (auto-executes):
-   - Place `NameClient` **[LocalScript]** into `StarterPlayer/StarterPlayerScripts`
-   - This LocalScript must contain:
-     - `clickHandler` (ModuleScript)
-
-4. **Install Shared Module**:
-   - Place `NameRankTitles` **[ModuleScript]** into `ReplicatedStorage`
-   - This provides version info and shared constants
-
-5. **Configure Settings**:
-   - Edit `config` ModuleScript under `NameServer` (see Configuration section below)
-
-6. **Publish and Test**:
-   - Enable "Allow HTTP Requests" in Game Settings
-
-### Runtime Structure
-
-After installation, your game should look like this:
-
-```
-ServerScriptService
-└── NameServer [Script] <- Auto-executes on server
-    ├── config [ModuleScript]
-    ├── trello [ModuleScript]
-    ├── overhead [ModuleScript]
-    ├── divisions [ModuleScript]
-    └── Tag [BillboardGui]
-
-StarterPlayer
-└── StarterPlayerScripts
-    └── NameClient [LocalScript] <- Auto-executes for each player
-        └── clickHandler [ModuleScript]
-
-ReplicatedStorage (optional)
-└── NameRankTitles [ModuleScript] <- Does NOT execute, only provides metadata
-```
-
-### Important Notes
-
-- ❌ **Folder names do NOT trigger execution** - only Script/LocalScript placement matters
-- ❌ **Do NOT place Scripts in ReplicatedStorage** - they will not execute
-- ❌ **Do NOT rely on `init.lua` naming** - it's just a convention, not a Roblox feature
-- ✅ **Scripts execute based on their container** (ServerScriptService, StarterPlayerScripts, etc.)
-- ✅ **ModuleScripts only run when explicitly `require()`d**
+Installation guide can be found in **[INSTALLATION.md](./INSTALLATION.md)**.
 
 ## Configuration
 
 ### Trello Setup
 
+Edit `NameRankTitles` ModuleScript (in `ReplicatedStorage`) to enable Trello access
+
+```lua
+-- Shared constants
+NameRankTitles.Constants = {
+	DefaultMaxDistance = 15,
+	EnableCanChatIcon = true,
+	EnableTrello = true, -- MUST BE SET TO 'true'
+}
+```
+
 Edit the `config` ModuleScript (child of `NameServer`) to add your Trello credentials:
 
 ```lua
-Config.enableTrello = false -- By default is set to false to prevent HTTP 429 error from empty URL.
-
 Config.board = ""     -- Your Trello board ID (from URL: trello.com/b/HERE/)
 Config.key = ""       -- Your API key from https://trello.com/power-ups/admin/
 Config.token = ""     -- Your API token (32 characters)
