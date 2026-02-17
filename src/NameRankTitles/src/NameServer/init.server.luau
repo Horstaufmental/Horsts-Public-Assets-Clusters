@@ -18,9 +18,13 @@ local Players = game:GetService("Players")
 
 -- Require modules directly from script children
 -- These are ModuleScripts that must be children of this Script
-local config = require(script.config)
-local Trello = require(script.trello)
 local Logic = require(script.logic)
+local Trello = require(script.trello)
+local config = require(script.config)
+
+local Constants = require(game:GetService("ReplicatedStorage"):FindFirstChild("NameRankTitles"))
+
+local checkEligibilityEvent = game:GetService("ReplicatedStorage"):WaitForChild("CheckEligibilityEvent")
 
 -- Get the Tag template
 local tagTemplate = script.Tag
@@ -48,6 +52,11 @@ Players.PlayerAdded:Connect(function(player)
 	end)
 	if player.Character then
 		Logic.onCharacter(player.Character, cache, tagTemplate)
+	end
+
+	-- temp solution, will work on later
+	if Constants.Constants.EnableCanChatIcon then
+		checkEligibilityEvent:FireAllClients()
 	end
 end)
 
