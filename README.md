@@ -92,10 +92,6 @@ You are free to:
   
 - No obligation applies to your own code or assets that simply use or interact with MPL files.
 
-# Contributing
-
-Contributions are welcome! Please read [`CONTRIBUTING.md`](./CONTRIBUTING.md) for guidelines on setting up your environment, coding style, and how to propose changes.
-
 # Contact me
 
 ![Static Badge](https://img.shields.io/badge/Horstaufmental-%235865f2?style=for-the-badge&label=Discord%20Profile&link=https%3A%2F%2Fdiscord.com%2Fusers%2F880022290023215145)
