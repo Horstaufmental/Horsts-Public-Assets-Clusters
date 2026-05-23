@@ -1,17 +1,5 @@
 ﻿/*
  * XMLDOM2JSON — Roblox XML (.rbxmx / .rbxlx) to canonical JSON DOM.
- *
- * Verified library usage:
- * - RobloxFile : Instance; file IS the root (RobloxFile.Open(Stream), no ReadFile).
- * - Instance.Properties = IReadOnlyDictionary<string, Property>; value = prop.Value (Property.Value).
- * - Instance.Attributes = RbxAttributes; value = attr.Value (RbxAttribute.Value).
- *
- * Design:
- * - Only non-default properties; DefaultProperty.Get(className, propName) for comparison.
- * - Deterministic ordering: SortedDictionary; children in document order.
- * - Enums: { "Enum": "EnumTypeName", "Value": number }; DataTypes expanded structurally.
- * - Referent emitted per instance for round-trip (JSONDOM2XML Ref resolution).
- * - Schema "RobloxDom" + version at root.
  */
 
 using System;

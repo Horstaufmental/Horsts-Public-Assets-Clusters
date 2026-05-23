@@ -4,47 +4,6 @@
 	
 	# NameRankTitles - Installation Guide
 
-	## Understanding Roblox Script Execution
-
-	>[!WARNING]
-	>Read this before installing!
-
-	### How Roblox Executes Scripts
-
-	Roblox executes scripts based on **two factors only**:
-
-	1. **Script Type** (Script, LocalScript, or ModuleScript)
-	2. **Container Placement** (which service the script is placed in)
-
-	### What Does NOT Trigger Execution
-
-	**Folder names** - Naming a folder `server` or `client` does nothing  
-	**File names** - Naming a file `init` does not make it auto-execute  
-	**Folder structure** - Nested folders do not affect execution  
-	**ModuleScript placement** - `ModuleScripts` never auto-execute, regardless of location
-
-	### What DOES Trigger Execution
-
-	**Script in ServerScriptService** - Auto-executes on server startup  
-	**LocalScript in StarterPlayerScripts** - Auto-executes for each player  
-	**LocalScript in StarterCharacterScripts** - Auto-executes when character spawns  
-	**Script/LocalScript in workspace** - Auto-executes (but not recommended)
-
-	### ModuleScripts
-
-	ModuleScripts **never auto-execute**. They only run when explicitly `require()`d by another script.
-
-	```lua
-	-- This ModuleScript will NOT run automatically
-	local MyModule = {}
-
-	print("This only prints when required!")
-
-	return MyModule
-	```
-
-	---
-
 	## Installation Steps
 
 	### Step 1: Download the Asset

@@ -1,23 +1,5 @@
 ﻿/*
  * Tool Builder (LuauExporter) — Builds a single .rbxm Model from a tool source directory.
- *
- * Design:
- * - Reads tool.json (name, version, entry, rootType). Builds Model named {Name}-v{Version}.
- * - Root init.luau = ModuleScript named after the tool (shared API, never auto-runs).
- * - server/init.luau = Script (auto-runs on server); client/init.luau = LocalScript (auto-runs on client).
- * - All other .luau files = ModuleScript.
- * - Folders containing init.luau become script instances (not folders), with children nested under them.
- * - .rbxmx under tool dir are loaded and their root children reparented into the tree (by name).
- * - .json files in RobloxDom format are loaded and their root children reparented into the tree.
- * - inject.json enables object injection: scripts can be injected into specific RBXMX descendants.
- * - misc/INSTALLATION.luau and misc/LICENSE.luau included as ModuleScripts.
- * - Saves via BinaryRobloxFile: root.Parent = file; file.Save(stream). No RobloxFile.WriteBinary in library.
- *
- * Execution Model:
- * - Only Script and LocalScript auto-execute in Roblox.
- * - ModuleScripts never auto-run; they must be required.
- * - Root init is a ModuleScript that both server and client scripts require.
- * - See EXECUTION_MODEL.md for detailed documentation.
  */
 
 using System;

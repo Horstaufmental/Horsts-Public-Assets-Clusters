@@ -1,12 +1,5 @@
 /*
  * RobloxModelToFilesystem — Converts a Roblox .rbxm model to the tool source filesystem layout.
- *
- * Design:
- * - Treats Folders as structural containers (directories)
- * - Script type is inferred from instance class (Script / LocalScript / ModuleScript)
- * - Handles script source extraction
- * - Preserves special script types (server/init.luau, client/init.luau, etc.)
- * - Ignores or handles non-script instances appropriately (metadata or explicit rules)
  */
 
 using System;

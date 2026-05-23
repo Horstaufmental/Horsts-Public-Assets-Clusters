@@ -1,14 +1,5 @@
 /*
  * JSONDOM2XML — Rebuild Roblox Instances from canonical JSON DOM and write .rbxmx/.rbxlx.
- *
- * Design:
- * - Reads schema RobloxDom JSON; root is the file root (e.g. XmlRobloxFile) with children.
- * - Instance type: typeof(Instance).Assembly.GetType("RobloxFiles." + className).
- * - Referent: preserved from JSON or generated (RBX0, RBX1, ...) for Ref resolution.
- * - Properties/attributes deserialized from JSON; Ref resolved via refMap (referent -> Instance).
- * - Two-pass: build full tree + refMap, then set all properties (so Ref can resolve).
- * - Output: XmlRobloxFile with root.Children reparented; file.Save(stream).
- * - Round-trip: XMLDOM2JSON → JSON → JSONDOM2XML → XML should preserve structure.
  */
 
 using System;
