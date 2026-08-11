@@ -6,7 +6,7 @@
 
 # Horst's Public Assets Clusters
 
-where i houses most of my assets for free public release that i've made/modified over my time with Roblox Studio
+where i houses most of my assets for free public release that i've made/modified over my time in programming career
 
 # Installation
 
@@ -79,6 +79,11 @@ Horsts-Public-Assets-Clusters
 ├── ...
 └── Utils.rbxm <-- our file!
 ```
+
+## Others
+
+Build instructions will be provided under the asset's respective `README.md`,
+with their own set of dependencies.
 
 # License
 
