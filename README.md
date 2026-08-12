@@ -1,6 +1,6 @@
 <div align="left">
     <picture>
-        <img src="https://raw.githubusercontent.com/Horstaufmental/Horsts-Public-Assets-Clusters/main/misc/HPAC_Full.png" width="90%">
+        <img src="https://media.githubusercontent.com/media/Horstaufmental/Horsts-Public-Assets-Clusters/refs/heads/main/misc/HPAC_Full.png" width="90%">
     </picture>
 </div>
 
@@ -96,10 +96,3 @@ You are free to:
 - If you redistribute an MPL-licensed file that you’ve changed, you must provide the modified source for that file.
   
 - No obligation applies to your own code or assets that simply use or interact with MPL files.
-
-# Contact me
-
-![Static Badge](https://img.shields.io/badge/Horstaufmental-%235865f2?style=for-the-badge&label=Discord%20Profile&link=https%3A%2F%2Fdiscord.com%2Fusers%2F880022290023215145)
-
-![Static Badge](https://img.shields.io/badge/Horstaufmental-%23000000?style=for-the-badge&label=Roblox%20Profile&link=https%3A%2F%2Fwww.roblox.com%2Fusers%2F460541970%2Fprofile)
-
